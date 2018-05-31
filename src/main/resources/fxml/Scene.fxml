@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.easymarket.FXMLController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.FXMLController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -26,7 +26,7 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#cadastrarFuncionario" text="Funcionário" />
                   <MenuItem mnemonicParsing="false" text="Lote" />
-                  <MenuItem mnemonicParsing="false" text="Produto" />
+                  <MenuItem mnemonicParsing="false" onAction="#cadastrarProduto" text="Produto" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Busca">
@@ -62,7 +62,7 @@
    <center>
       <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
          <content>
-            <HBox fx:id="content" alignment="TOP_CENTER">
+            <HBox fx:id="content" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <Label fx:id="bemVindo" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: ORANGE; -fx-border-width: 4; -fx-border-color: white;" text="Bem Vindo!" textFill="WHITE" HBox.hgrow="ALWAYS">
                      <font>

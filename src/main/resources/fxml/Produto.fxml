@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="information.ProdutoController">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="980.0" minHeight="-Infinity" minWidth="980.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TitledPane collapsible="false" text="Dados do Produto" textFill="#ff6d00">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <MaterialDesignIconView glyphName="BASKET" size="24" />
+               </graphic>
+               <content>
+                  <FlowPane hgap="32.0" vgap="16.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="Nome:" />
+                              <TextField fx:id="nome" minWidth="200.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Tipo:" />
+                              <TextField fx:id="tipo" minWidth="200.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Qtd (prateleira):" />
+                              <Spinner fx:id="qtdPrateleira" editable="true" maxWidth="100.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Qtd (estoque):" />
+                              <Spinner fx:id="qtdEstoque" editable="true" maxWidth="100.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Marca:" />
+                              <TextField fx:id="marca" minWidth="200.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Código:" />
+                              <TextField fx:id="codigo" minWidth="200.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Custo:" />
+                              <Spinner fx:id="custo" editable="true" maxWidth="100.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Preço de venda:" />
+                              <Spinner fx:id="preco" editable="true" maxWidth="100.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </FlowPane>
+               </content>
+            </TitledPane>
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Descrição" textFill="#ff6d00" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <MaterialDesignIconView glyphName="CLIPBOARD_TEXT" size="24" />
+               </graphic>
+               <content>
+                  <TextArea fx:id="descricao" maxHeight="1.7976931348623157E308">
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                  </TextArea>
+               </content>
+            </TitledPane>
+         </children>
+      </VBox>
+      <ToolBar minHeight="40.0">
+         <items>
+            <Button fx:id="cancel" cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #a00;" text="Cancelar" textFill="WHITE">
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="KEYBOARD_BACKSPACE" size="20" />
+               </graphic>
+            </Button>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button fx:id="save" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#save" style="-fx-background-color: #007;" text="Salvar" textFill="WHITE">
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="CONTENT_SAVE" size="20" />
+               </graphic>
+            </Button>
+         </items>
+      </ToolBar>
+   </children>
+</VBox>

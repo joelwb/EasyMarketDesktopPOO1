@@ -1,4 +1,4 @@
-package com.easymarket;
+package information;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,6 +22,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import main.MainButtonClickListener;
 import modelo.pessoa.Endereco;
 import modelo.pessoa.Endereco.Estado;
 import modelo.supermercado.Funcionario;
@@ -120,7 +121,6 @@ public class DadosPessoaisController implements Initializable {
             inicializaCampos();
         }
     }
-
 
     @FXML
     private void cancel(ActionEvent event) {

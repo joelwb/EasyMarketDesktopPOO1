@@ -1,5 +1,6 @@
-package com.easymarket;
+package main;
 
+import information.DadosPessoaisController;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import modelo.pessoa.Endereco;
 import modelo.pessoa.PessoaFisica;
 import modelo.supermercado.Funcionario;
@@ -25,8 +27,6 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     @FXML
     private Label bemVindo;
 
-    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -49,8 +49,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
         Endereco endereco = new Endereco("Manguinhos", "29871-475", "Serra", Endereco.Estado.ES, 52, "IFES");
         Funcionario funcionario;
         
+        
+        //esse erro é apenas um teste
         try {
-            funcionario = new Funcionario("Gerente", "Vendas", "131.117.850-33", new Date(), PessoaFisica.Genero.M, "joel@gmail.com", "TesteSenha", "Joel", endereco);
+            funcionario = new Funcionario("Gerente", "Vendas", "131.117.850-33", new Date(), PessoaFisica.Genero.M, "joel@gmail.com", "Tesha2", "Joel", endereco);
         } catch (UnsupportedEncodingException | IllegalArgumentException | NoSuchAlgorithmException ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             if (ex instanceof IllegalArgumentException){
@@ -73,6 +75,7 @@ public class FXMLController implements Initializable, MainButtonClickListener {
         Parent root = loader.load();
         
         content.getChildren().clear();
+        HBox.setHgrow(root, Priority.ALWAYS);
         content.getChildren().add(root);
     }
 
@@ -85,6 +88,18 @@ public class FXMLController implements Initializable, MainButtonClickListener {
         Parent root = loader.load();
         
         content.getChildren().clear();
+        HBox.setHgrow(root, Priority.ALWAYS);
+        content.getChildren().add(root);
+    }
+
+    @FXML
+    private void cadastrarProduto(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
+        
+        Parent root = loader.load();
+        
+        content.getChildren().clear();
+        HBox.setHgrow(root, Priority.ALWAYS);
         content.getChildren().add(root);
     }
 }
