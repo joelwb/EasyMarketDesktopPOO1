@@ -19,6 +19,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
@@ -39,29 +40,25 @@ public class DadosPessoaisController implements Initializable {
     private MainButtonClickListener listener;
 
     @FXML
-    private ToggleGroup generoGroup;
+    private TextField email;
+    @FXML
+    private CustomPasswordField senha;
     @FXML
     private Button changeSenha;
     @FXML
     private VBox confirmContent;
-    @FXML
-    private RadioButton masculino;
-    @FXML
-    private RadioButton feminino;
-    @FXML
-    private Button cancel;
-    @FXML
-    private Button save;
-    @FXML
-    private TextField email;
-    @FXML
-    private CustomPasswordField senha;
     @FXML
     private CustomPasswordField confirmSenha;
     @FXML
     private TextField nome;
     @FXML
     private TextField cpf;
+    @FXML
+    private RadioButton masculino;
+    @FXML
+    private ToggleGroup generoGroup;
+    @FXML
+    private RadioButton feminino;
     @FXML
     private DatePicker dataNasc;
     @FXML
@@ -80,6 +77,20 @@ public class DadosPessoaisController implements Initializable {
     private TextField cidade;
     @FXML
     private ChoiceBox<String> estado;
+    @FXML
+    private Button addContato;
+    @FXML
+    private Button editContato;
+    @FXML
+    private Button removeContato;
+    @FXML
+    private TableView<String> contatosTable;
+    @FXML
+    private Button cancel;
+    @FXML
+    private Button save;
+
+    
 
     public DadosPessoaisController(Funcionario funcionario, MainButtonClickListener listener) {
         if (listener == null) {
@@ -130,6 +141,18 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private void save(ActionEvent event) {
         listener.save();
+    }
+    
+    @FXML
+    private void addContato(ActionEvent event) {
+    }
+
+    @FXML
+    private void editContato(ActionEvent event) {
+    }
+
+    @FXML
+    private void removeContato(ActionEvent event) {
     }
 
     private void inicializaCampos() {

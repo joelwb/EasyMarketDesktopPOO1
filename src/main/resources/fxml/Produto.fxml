@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="information.ProdutoController">
+<VBox alignment="TOP_CENTER" prefHeight="720.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="information.ProdutoController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="980.0" minHeight="-Infinity" minWidth="980.0" VBox.vgrow="ALWAYS">
          <children>
@@ -82,7 +81,7 @@
                   </FlowPane>
                </content>
             </TitledPane>
-            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Descrição" textFill="#ff6d00" VBox.vgrow="ALWAYS">
+            <TitledPane collapsible="false" text="Descrição" textFill="#ff6d00" VBox.vgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -90,12 +89,34 @@
                   <MaterialDesignIconView glyphName="CLIPBOARD_TEXT" size="24" />
                </graphic>
                <content>
-                  <TextArea fx:id="descricao" maxHeight="1.7976931348623157E308">
+                  <TextArea fx:id="descricao">
                      <padding>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </padding>
                   </TextArea>
                </content>
+            </TitledPane>
+            <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Lotes" textFill="#ff6a00" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <MaterialDesignIconView glyphName="PACKAGE_VARIANT" size="24" />
+               </graphic>
+               <content>
+                  <VBox alignment="TOP_CENTER">
+                     <children>
+                        <Button fx:id="searchLotes" mnemonicParsing="false" onAction="#searchLotes" text="Buscar todos lotes deste produto">
+                           <graphic>
+                              <MaterialDesignIconView glyphName="MAGNIFY" size="18" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </content>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </TitledPane>
          </children>
       </VBox>

@@ -1,10 +1,9 @@
-package information;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package information;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,8 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 /**
@@ -21,32 +21,28 @@ import javafx.scene.control.TextField;
  *
  * @author joel-
  */
-public class ProdutoController implements Initializable {
+public class FornecedorController implements Initializable {
 
-    @FXML
-    private Button cancel;
-    @FXML
-    private Button save;
     @FXML
     private TextField nome;
     @FXML
-    private TextField tipo;
+    private TextField cnpj;
     @FXML
-    private Spinner<?> qtdPrateleira;
+    private TextField cep;
     @FXML
-    private Spinner<?> qtdEstoque;
+    private TextField rua;
     @FXML
-    private TextField marca;
+    private Spinner<?> numero;
     @FXML
-    private TextField codigo;
+    private TextField bairro;
     @FXML
-    private Spinner<?> custo;
+    private TextField cidade;
     @FXML
-    private Spinner<?> preco;
+    private ChoiceBox<?> estado;
     @FXML
-    private TextArea descricao;
+    private TableView<?> contatosTable;
     @FXML
-    private Button searchLotes;
+    private Button cancel;
 
     /**
      * Initializes the controller class.
@@ -57,15 +53,7 @@ public class ProdutoController implements Initializable {
     }    
 
     @FXML
-    private void cancel(ActionEvent event) {
-    }
-
-    @FXML
-    private void save(ActionEvent event) {
-    }
-
-    @FXML
-    private void searchLotes(ActionEvent event) {
+    private void back(ActionEvent event) {
     }
     
 }

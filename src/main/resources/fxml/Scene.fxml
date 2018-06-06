@@ -25,17 +25,17 @@
           <Menu mnemonicParsing="false" text="Cadastro">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#cadastrarFuncionario" text="Funcionário" />
-                  <MenuItem mnemonicParsing="false" text="Lote" />
+                  <MenuItem mnemonicParsing="false" onAction="#cadastrarLote" text="Lote" />
                   <MenuItem mnemonicParsing="false" onAction="#cadastrarProduto" text="Produto" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Busca">
             <items>
               <MenuItem mnemonicParsing="false" text="Cliente" />
-                  <MenuItem mnemonicParsing="false" text="Fornecedor" />
+                  <MenuItem mnemonicParsing="false" onAction="#buscarFornecedores" text="Fornecedor" />
                   <MenuItem mnemonicParsing="false" text="Funcionário" />
                   <MenuItem mnemonicParsing="false" text="Lote" />
-                  <MenuItem mnemonicParsing="false" text="Produto" />
+                  <MenuItem mnemonicParsing="false" onAction="#buscarProdutos" text="Produto" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Relatório">

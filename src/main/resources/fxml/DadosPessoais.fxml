@@ -21,8 +21,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomPasswordField?>
 
-
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.DadosPessoaisController">
    <children>
       <VBox maxWidth="720.0" minWidth="980.0" VBox.vgrow="ALWAYS">
           <children>
@@ -132,7 +131,7 @@
                         <VBox>
                            <children>
                               <Label text="Data de Nascimento:" />
-                              <DatePicker fx:id="dataNasc" />
+                              <DatePicker fx:id="dataNasc" minWidth="200.0" />
                            </children>
                         </VBox>
                      </children>
@@ -239,16 +238,27 @@
                      <children>
                         <FlowPane alignment="TOP_CENTER" hgap="64.0" vgap="15.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Adicionar" />
-                              <Button mnemonicParsing="false" text="Remover" />
+                              <Button fx:id="addContato" minWidth="125.0" mnemonicParsing="false" onAction="#addContato" text="Adicionar">
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="PLUS" size="20" />
+                                 </graphic></Button>
+                              <Button fx:id="editContato" minWidth="125.0" mnemonicParsing="false" onAction="#editContato" text="Editar">
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="PENCIL" size="20" />
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="removeContato" minWidth="125.0" mnemonicParsing="false" onAction="#removeContato" text="Remover">
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="DELETE" size="20" />
+                                 </graphic></Button>
                            </children>
                            <VBox.margin>
                               <Insets bottom="15.0" />
                            </VBox.margin>
                         </FlowPane>
-                        <TableView maxHeight="1.7976931348623157E308" maxWidth="500.0" minHeight="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="contatosTable" maxHeight="1.7976931348623157E308" maxWidth="500.0" minHeight="200.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn prefWidth="135.0" text="Valor" />
+                            <TableColumn prefWidth="135.0" text="Contato" />
                             <TableColumn minWidth="0.0" prefWidth="239.0" text="Tipo" />
                           </columns>
                            <columnResizePolicy>
