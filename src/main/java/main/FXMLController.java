@@ -23,7 +23,6 @@ import modelo.pessoa.PessoaFisica;
 import modelo.supermercado.Funcionario;
 import search.BuscaController;
 import search.BuscaProdutoController;
-import search.FilterComunication;
 
 public class FXMLController implements Initializable, MainButtonClickListener {
 

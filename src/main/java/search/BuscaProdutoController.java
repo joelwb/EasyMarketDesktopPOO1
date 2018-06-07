@@ -6,6 +6,8 @@
 package search;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -21,7 +23,15 @@ public class BuscaProdutoController implements Initializable, FilterComunication
     
     public BuscaProdutoController(BuscaController bc) {
         //TODO envia paramentro pra construção do filtro
-        bc.setFilters(null);
+        List<FilterData> filters = new ArrayList<>();
+        
+        filters.add(new FilterData("Nome", "Produto", String.class));
+        filters.add(new FilterData("Marca", "Produto", String.class));
+        filters.add(new FilterData("Tipo", "Produto", String.class));
+        filters.add(new FilterData("Código", "Produto", String.class));
+        
+        
+        bc.setFilters(filters);
     }
     
     /**
@@ -47,7 +57,10 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @Override
     public void listenResponse(Map<String, Object> response) {
-        return;
+        String nome = (String) response.get("Nome");
+        String marca = (String) response.get("Marca");
+        String tipo = (String) response.get("Tipo");
+        String codigo = (String) response.get("Codigo");
     }
     
 }
