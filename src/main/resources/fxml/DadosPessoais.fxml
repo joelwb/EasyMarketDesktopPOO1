@@ -45,7 +45,7 @@
                                       <TextField fx:id="email" minWidth="200.0" />
                                   </children>
                               </VBox>
-                        <VBox>
+                        <VBox fx:id="senhaConteiner">
                            <children>
                               <Label text="Senha:">
                                  <graphic>
@@ -68,19 +68,6 @@
                            </children>
                            <HBox.margin>
                               <Insets left="15.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox fx:id="confirmContent">
-                           <children>
-                              <Label text="Confirmação:">
-                                 <graphic>
-                                    <MaterialDesignIconView glyphName="LOCK" size="16" />
-                                 </graphic>
-                              </Label>
-                              <CustomPasswordField fx:id="confirmSenha" minWidth="200.0" />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="16.0" />
                            </HBox.margin>
                         </VBox>
                      </children>

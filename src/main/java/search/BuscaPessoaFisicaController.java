@@ -5,8 +5,6 @@
  */
 package search;
 
-import search.filter.FilterComunication;
-import search.filter.FilterData;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +15,48 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import modelo.usuarios.PessoaFisica;
+import search.filter.FilterComunication;
+import search.filter.FilterData;
 
 /**
  * FXML Controller class
  *
  * @author joel-
  */
-public class BuscaProdutoController implements Initializable, FilterComunication {
-    @FXML
-    private TableView<?> prodTable;
+public class BuscaPessoaFisicaController implements Initializable, FilterComunication {
+    private PessoaFisicaClass pf;
+    
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
-    private TableColumn<?, ?> codCol;
+    private TableColumn<?, ?> cpfCol;
+    @FXML
+    private TableView<?> pessoaFisicaTable;
+
+    public enum PessoaFisicaClass{
+        Cliente("Cliente"), Funcionario("Funcionário");
+        
+        private final String classe;
+        
+        private PessoaFisicaClass(String classe){
+            this.classe = classe;
+        }
+        
+        public String getClasse(){
+            return classe;
+        }
+    }
     
-    
-    public BuscaProdutoController(BuscaController bc) {
+    public BuscaPessoaFisicaController(BuscaController bc, PessoaFisicaClass pf) {
+        this.pf = pf;
+        
         List<FilterData> filters = new ArrayList<>();
         
-        filters.add(new FilterData("Nome", "Produto", String.class));
-        filters.add(new FilterData("Marca", "Produto", String.class));
-        filters.add(new FilterData("Tipo", "Produto", String.class));
-        filters.add(new FilterData("Código", "Produto", String.class));
+        filters.add(new FilterData("Nome", pf.getClasse(), String.class));
+        filters.add(new FilterData("CPF", pf.getClasse(), String.class));
+        filters.add(new FilterData("Gênero", pf.getClasse(), PessoaFisica.Genero.class));
+        filters.add(new FilterData("Código", pf.getClasse(), String.class));
         
         bc.setFilters(filters);
     }
@@ -53,17 +71,12 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void getDetalhes(ActionEvent event) {
-        
     }
 
     @FXML
-    private void getAllLotes(ActionEvent event) {
+    private void getAllOrders(ActionEvent event) {
     }
-
-    @FXML
-    private void getLotesNestVencim(ActionEvent event) {
-    }
-
+    
     @Override
     public void listenResponse(Map<String, Object> response) {
         String nome = (String) response.get("Nome");

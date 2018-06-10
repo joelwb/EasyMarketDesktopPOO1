@@ -1,4 +1,4 @@
-package information;
+package model_info;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,9 +24,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import main.MainButtonClickListener;
-import modelo.pessoa.Endereco;
-import modelo.pessoa.Endereco.Estado;
-import modelo.supermercado.Funcionario;
+import modelo.usuarios.Endereco;
+import modelo.usuarios.Endereco.Estado;
+import modelo.usuarios.Funcionario;
 import org.controlsfx.control.textfield.CustomPasswordField;
 
 /**
@@ -45,10 +45,6 @@ public class DadosPessoaisController implements Initializable {
     private CustomPasswordField senha;
     @FXML
     private Button changeSenha;
-    @FXML
-    private VBox confirmContent;
-    @FXML
-    private CustomPasswordField confirmSenha;
     @FXML
     private TextField nome;
     @FXML
@@ -89,6 +85,8 @@ public class DadosPessoaisController implements Initializable {
     private Button cancel;
     @FXML
     private Button save;
+    @FXML
+    private VBox senhaConteiner;
 
     
 
@@ -116,18 +114,17 @@ public class DadosPessoaisController implements Initializable {
         }
 
         if (funcionario == null) {              //é cadastro
-            changeSenha.setVisible(false);
-            changeSenha.setManaged(false);
+            senhaConteiner.setVisible(false);
+            senhaConteiner.setManaged(false);
             save.setText("Cadastrar");
         } else {                                //não é cadastro
-            confirmContent.setVisible(false);
-            confirmContent.setManaged(false);
-            
             senha.setDisable(true);
             cpf.setDisable(true);
             masculino.setDisable(true);
             feminino.setDisable(true);
             dataNasc.setDisable(true);
+            
+            cancel.setText("Voltar");
             
             inicializaCampos();
         }

@@ -1,4 +1,4 @@
-package information;
+package model_info;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -46,8 +46,6 @@ public class ProdutoController implements Initializable {
     private Spinner<?> preco;
     @FXML
     private TextArea descricao;
-    @FXML
-    private Button searchLotes;
 
     /**
      * Initializes the controller class.
@@ -65,8 +63,5 @@ public class ProdutoController implements Initializable {
     private void save(ActionEvent event) {
     }
 
-    @FXML
-    private void searchLotes(ActionEvent event) {
-    }
     
 }

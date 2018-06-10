@@ -11,22 +11,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.PropertySheet?>
 
-<BorderPane maxWidth="980.0" style="-fx-border-color: #ccc;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="search.BuscaController">
+<BorderPane maxWidth="1.7976931348623157E308" style="-fx-border-color: #ccc;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox fx:id="content" BorderPane.alignment="CENTER" />
+      <VBox fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="980.0" BorderPane.alignment="CENTER" />
    </center>
    <left>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <VBox alignment="TOP_CENTER">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
-                  <PropertySheet fx:id="filter" VBox.vgrow="ALWAYS" />
-                  <Separator prefWidth="200.0">
+                  <PropertySheet fx:id="filter" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                  <Separator>
                      <VBox.margin>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </VBox.margin>
                   </Separator>
-                  <Button maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#buscar" text="Buscar">
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buscar" text="Buscar">
                      <graphic>
                         <MaterialDesignIconView glyphName="MAGNIFY" size="16" />
                      </graphic>
@@ -36,7 +36,7 @@
                   </Button>
                </children>
             </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0">
+            <Separator maxWidth="1.7976931348623157E308" orientation="VERTICAL">
                <HBox.margin>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </HBox.margin>
@@ -47,7 +47,7 @@
    <bottom>
       <ToolBar minHeight="40.0" BorderPane.alignment="CENTER">
          <items>
-            <Button fx:id="cancel" cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
+            <Button cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
                <graphic>
                   <MaterialDesignIconView fill="WHITE" glyphName="KEYBOARD_BACKSPACE" size="20" />
                </graphic>

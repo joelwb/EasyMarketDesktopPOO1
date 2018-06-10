@@ -1,6 +1,6 @@
 package main;
 
-import information.DadosPessoaisController;
+import model_info.DadosPessoaisController;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -16,12 +16,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import modelo.pessoa.Endereco;
-import modelo.pessoa.PessoaFisica;
-import modelo.supermercado.Funcionario;
+import modelo.usuarios.Endereco;
+import modelo.usuarios.Funcionario;
+import modelo.usuarios.PessoaFisica;
 import search.BuscaController;
+import search.BuscaFornecedorController;
+import search.BuscaLoteController;
+import search.BuscaPessoaFisicaController;
 import search.BuscaProdutoController;
 
 public class FXMLController implements Initializable, MainButtonClickListener {
@@ -116,21 +120,73 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void buscarFornecedores(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
+        BuscaController bc = new BuscaController(this);
+        loader.setController(bc);
         addScreen(loader);
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
+        BuscaFornecedorController bfc = new BuscaFornecedorController(bc);
+        bc.setFilterComunication(bfc);
+        
+        subLoader.setController(bfc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
     }
 
     @FXML
     private void buscarProdutos(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
-        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
-        
+        BuscaController bc = new BuscaController(this);
+        loader.setController(bc);
         addScreen(loader);
-        BuscaController bc = (BuscaController) loader.getController();
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
         BuscaProdutoController bpc = new BuscaProdutoController(bc);
         bc.setFilterComunication(bpc);
         
         subLoader.setController(bpc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
+    }
+
+    @FXML
+    private void buscaLote(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
+        BuscaController bc = new BuscaController(this);
+        loader.setController(bc);
+        addScreen(loader);
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
+        BuscaLoteController blc = new BuscaLoteController(bc);
+        bc.setFilterComunication(blc);
+        
+        subLoader.setController(blc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
+    }
+
+    @FXML
+    private void buscaCliente(ActionEvent event) throws IOException {
+        buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass.Cliente);
+    }
+
+    @FXML
+    private void buscaFuncionario(ActionEvent event) throws IOException {
+        buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass.Funcionario);
+    }
+    
+    private void buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass pf) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
+        BuscaController bc = new BuscaController(this);
+        loader.setController(bc);
+        addScreen(loader);
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaPessoaFisica.fxml"));
+        BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(bc,pf);
+        bc.setFilterComunication(bpfc);
+        
+        subLoader.setController(bpfc);
         Parent subView = subLoader.load();
         bc.setContent(subView);
     }

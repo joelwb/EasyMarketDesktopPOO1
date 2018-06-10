@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.BuscaProdutoController">
+<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TableView fx:id="prodTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+      <TableView fx:id="LoteTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" text="Nome" />
-          <TableColumn fx:id="codCol" editable="false" prefWidth="75.0" text="Código" />
+          <TableColumn fx:id="identifCol" editable="false" prefWidth="75.0" text="Identificador" />
+          <TableColumn fx:id="codProdCol" editable="false" prefWidth="75.0" text="Cód. Prod." />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -20,13 +20,13 @@
       </TableView>
       <VBox alignment="TOP_CENTER" maxWidth="250.0" spacing="16.0">
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getDetalhes" text="Detalhes">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getDetalhesLote" text="Detalhes do Lote">
                <VBox.margin>
                   <Insets top="24.0" />
                </VBox.margin>
             </Button>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getAllLotes" text="Todos os Lotes" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getLotesNestVencim" text="Lotes próximos do vencimento" />
+            <Button maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getDetalhesProd" text="Detalhes do Produto" />
+            <Button maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getDetalhesForn" text="Detalhes do Fornecedor" />
          </children>
          <padding>
             <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

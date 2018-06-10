@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package search;
+package search.filter;
 
 import util.Util;
 
@@ -17,9 +17,9 @@ public class FilterData {
     private final Class type;
 
     public FilterData(String filterName, String filterCategory, Class type) throws IllegalArgumentException{
-        Util.verificaStringNullVazia(filterName);
-        Util.verificaStringNullVazia(filterCategory);
-        Util.verificaIsObjNull(type);
+        Util.verificaStringNullVazia(filterName,filterName);
+        Util.verificaStringNullVazia(filterCategory,filterCategory);
+        Util.verificaIsObjNull(type,"Tipo");
         
         this.filterName = filterName;
         this.filterCategory = filterCategory;

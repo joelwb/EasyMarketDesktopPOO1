@@ -31,10 +31,10 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Busca">
             <items>
-              <MenuItem mnemonicParsing="false" text="Cliente" />
+              <MenuItem mnemonicParsing="false" onAction="#buscaCliente" text="Cliente" />
                   <MenuItem mnemonicParsing="false" onAction="#buscarFornecedores" text="Fornecedor" />
-                  <MenuItem mnemonicParsing="false" text="Funcionário" />
-                  <MenuItem mnemonicParsing="false" text="Lote" />
+                  <MenuItem mnemonicParsing="false" onAction="#buscaFuncionario" text="Funcionário" />
+                  <MenuItem mnemonicParsing="false" onAction="#buscaLote" text="Lote" />
                   <MenuItem mnemonicParsing="false" onAction="#buscarProdutos" text="Produto" />
             </items>
           </Menu>

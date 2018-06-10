@@ -5,6 +5,8 @@
  */
 package search;
 
+import search.filter.FilterComunication;
+import search.filter.FilterData;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +16,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import main.CustomItemSheet;
+import main.MainButtonClickListener;
+import search.filter.component.CustomItemSheet;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
 
@@ -27,14 +30,16 @@ import org.controlsfx.control.PropertySheet.Item;
  */
 public class BuscaController implements Initializable {
     private FilterComunication filterComunc;
+    private MainButtonClickListener listener;
 
     @FXML
     private PropertySheet filter;
     @FXML
     private VBox content;
-    @FXML
-    private Button cancel;
 
+    public BuscaController(MainButtonClickListener listener) {
+        this.listener = listener;
+    }
     
     /**
      * Initializes the controller class.
@@ -44,6 +49,7 @@ public class BuscaController implements Initializable {
     }
 
     public void setContent(Parent view){
+        VBox.setVgrow(view, Priority.ALWAYS);
         content.getChildren().add(view);
     }
     
@@ -73,6 +79,7 @@ public class BuscaController implements Initializable {
 
     @FXML
     private void back(ActionEvent event) {
+        listener.cancel();
     }
 
 }
