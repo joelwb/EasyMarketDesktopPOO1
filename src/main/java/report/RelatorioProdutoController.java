@@ -17,9 +17,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import search.BuscaController;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import filter.FiltroController;
+import filter.FilterComunication;
+import filter.FilterData;
+import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
 
 /**
@@ -28,17 +29,20 @@ import static util.ConversorDataObjs.toDate;
  * @author joel-
  */
 public class RelatorioProdutoController implements Initializable, FilterComunication {
-
+    private final Supermercado supermercado;
+    
     @FXML
-    private TableView<?> prodTable;
+    private TableView<?> tableRelatorio;
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
     private TableColumn<?, ?> codCol;
     @FXML
-    private TableColumn<?, ?> codCol1;
+    private TableColumn<?, ?> numVendasCol;
 
-    public RelatorioProdutoController(BuscaController bc) {
+    public RelatorioProdutoController(FiltroController bc, Supermercado supermercado) {
+        this.supermercado = supermercado;
+        
         List<FilterData> filters = new ArrayList<>();
         
         filters.add(new FilterData("Data Min", "Intervalo de tempo", LocalDate.class));
@@ -65,14 +69,18 @@ public class RelatorioProdutoController implements Initializable, FilterComunica
 
     @FXML
     private void getDetalhes(ActionEvent event) {
+        //TODO Abrir Produto no ProdutoController
+        
     }
 
     @FXML
     private void getAllLotes(ActionEvent event) {
+        //TODO Chamar BuscaLotesController para exibir os lotes
     }
 
     @FXML
     private void getLotesNestVencim(ActionEvent event) {
+        //TODO Chamar BuscaLotesController para exibir os lotes
     }
     
 }

@@ -136,7 +136,7 @@
             <Insets />
          </VBox.margin>
          <items>
-            <Button fx:id="cancel" cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
+            <Button cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
                <graphic>
                   <MaterialDesignIconView fill="WHITE" glyphName="KEYBOARD_BACKSPACE" size="20" />
                </graphic>

@@ -22,7 +22,7 @@ import modelo.usuarios.Funcionario;
 import report.RelatorioClienteController;
 import report.RelatorioMeioPagController;
 import report.RelatorioProdutoController;
-import search.BuscaController;
+import filter.FiltroController;
 import search.BuscaFornecedorController;
 import search.BuscaLoteController;
 import search.BuscaPessoaFisicaController;
@@ -109,9 +109,9 @@ public class FXMLController implements Initializable, MainButtonClickListener {
         addScreen(loader);
     }
     
-    private BuscaController getNewBuscaController() throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
-        BuscaController bc = new BuscaController(this);
+    private FiltroController getNewBuscaController() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Filtro.fxml"));
+        FiltroController bc = new FiltroController(this);
         loader.setController(bc);
         addScreen(loader);
         
@@ -120,10 +120,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void buscarFornecedores(ActionEvent event) throws IOException {
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
-        BuscaFornecedorController bfc = new BuscaFornecedorController(bc);
+        BuscaFornecedorController bfc = new BuscaFornecedorController(bc, market);
         bc.setFilterComunication(bfc);
         
         subLoader.setController(bfc);
@@ -133,10 +133,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void buscarProdutos(ActionEvent event) throws IOException {
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
-        BuscaProdutoController bpc = new BuscaProdutoController(bc);
+        BuscaProdutoController bpc = new BuscaProdutoController(bc, market);
         bc.setFilterComunication(bpc);
         
         subLoader.setController(bpc);
@@ -146,10 +146,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void buscarLotes(ActionEvent event) throws IOException {
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
-        BuscaLoteController blc = new BuscaLoteController(bc);
+        BuscaLoteController blc = new BuscaLoteController(bc, market);
         bc.setFilterComunication(blc);
         
         subLoader.setController(blc);
@@ -168,10 +168,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     }
     
     private void buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass pf) throws IOException{
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaPessoaFisica.fxml"));
-        BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(bc,pf);
+        BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(bc,pf, market);
         bc.setFilterComunication(bpfc);
         
         subLoader.setController(bpfc);
@@ -190,10 +190,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     }
     
     private void showRelatorioCliente(RelatorioClienteController.TipoRelatorio tr) throws IOException{
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioCliente.fxml"));
-        RelatorioClienteController rcc = new RelatorioClienteController(bc,tr);
+        RelatorioClienteController rcc = new RelatorioClienteController(bc,tr, market);
         bc.setFilterComunication(rcc);
         
         subLoader.setController(rcc);
@@ -203,10 +203,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void showProdMaisVend(ActionEvent event) throws IOException {
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioProduto.fxml"));
-        RelatorioProdutoController rpc = new RelatorioProdutoController(bc);
+        RelatorioProdutoController rpc = new RelatorioProdutoController(bc, market);
         bc.setFilterComunication(rpc);
         
         subLoader.setController(rpc);
@@ -225,10 +225,10 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     }
     
     private void showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio tr) throws IOException{
-        BuscaController bc = getNewBuscaController();
+        FiltroController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioMeioPag.fxml"));
-        RelatorioMeioPagController rmpc = new RelatorioMeioPagController(bc,tr);
+        RelatorioMeioPagController rmpc = new RelatorioMeioPagController(bc,tr, market);
         bc.setFilterComunication(rmpc);
         
         subLoader.setController(rmpc);

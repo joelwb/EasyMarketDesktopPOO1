@@ -5,6 +5,7 @@
  */
 package search;
 
+import filter.FiltroController;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import modelo.supermercado.Supermercado;
 import modelo.usuarios.PessoaFisica;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import filter.FilterComunication;
+import filter.FilterData;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
@@ -25,7 +28,8 @@ import search.filter.FilterData;
  * @author joel-
  */
 public class BuscaPessoaFisicaController implements Initializable, FilterComunication {
-    private PessoaFisicaClass pf;
+    private final PessoaFisicaClass pf;
+    private final Supermercado supermercado;
     
     @FXML
     private TableColumn<?, ?> nameCol;
@@ -33,6 +37,8 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
     private TableColumn<?, ?> cpfCol;
     @FXML
     private TableView<?> pessoaFisicaTable;
+    @FXML
+    private Button ordersButton;
 
     public enum PessoaFisicaClass{
         Cliente("Cliente"), Funcionario("Funcionário");
@@ -48,7 +54,9 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         }
     }
     
-    public BuscaPessoaFisicaController(BuscaController bc, PessoaFisicaClass pf) {
+    public BuscaPessoaFisicaController(FiltroController bc, PessoaFisicaClass pf, Supermercado supermercado) {
+        this.supermercado = supermercado;
+        
         this.pf = pf;
         
         List<FilterData> filters = new ArrayList<>();
@@ -56,7 +64,6 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         filters.add(new FilterData("Nome", pf.getClasse(), String.class));
         filters.add(new FilterData("CPF", pf.getClasse(), String.class));
         filters.add(new FilterData("Gênero", pf.getClasse(), PessoaFisica.Genero.class));
-        filters.add(new FilterData("Código", pf.getClasse(), String.class));
         
         bc.setFilters(filters);
     }
@@ -66,22 +73,26 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (pf == PessoaFisicaClass.Funcionario){
+            ordersButton.setVisible(false);
+            ordersButton.setManaged(false);
+        }
     }    
 
     @FXML
     private void getDetalhes(ActionEvent event) {
+        //TODO Abrir Cliente ou Funcionario no DadosPessoaisController
     }
 
     @FXML
     private void getAllOrders(ActionEvent event) {
+        //TODO tela com compras do cliente
     }
     
     @Override
     public void listenResponse(Map<String, Object> response) {
         String nome = (String) response.get("Nome");
-        String marca = (String) response.get("Marca");
-        String tipo = (String) response.get("Tipo");
-        String codigo = (String) response.get("Codigo");
+        String marca = (String) response.get("CPF");
+        String tipo = (String) response.get("Gênero");
     }
 }

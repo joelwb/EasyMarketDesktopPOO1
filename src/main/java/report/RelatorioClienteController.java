@@ -17,9 +17,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import search.BuscaController;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import filter.FiltroController;
+import filter.FilterComunication;
+import filter.FilterData;
+import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
 
 /**
@@ -29,9 +30,10 @@ import static util.ConversorDataObjs.toDate;
  */
 public class RelatorioClienteController implements Initializable, FilterComunication {
     private RelatorioClienteController.TipoRelatorio tipo;
+    private final Supermercado supermercado;
     
     @FXML
-    private TableView<?> pessoaFisicaTable;
+    private TableView<?> tableRelatorio;
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
@@ -51,8 +53,9 @@ public class RelatorioClienteController implements Initializable, FilterComunica
         public String getTipo(){return tipo;}
     }
 
-    public RelatorioClienteController(BuscaController bc, RelatorioClienteController.TipoRelatorio tipo) {
+    public RelatorioClienteController(FiltroController bc, RelatorioClienteController.TipoRelatorio tipo, Supermercado supermercado) {
         this.tipo = tipo;
+        this.supermercado = supermercado;
         
         List<FilterData> filters = new ArrayList<>();
         
@@ -74,10 +77,12 @@ public class RelatorioClienteController implements Initializable, FilterComunica
     
     @FXML
     private void getDetalhes(ActionEvent event) {
+        //TODO Abrir Cliente ou Funcionario no DadosPessoaisController
     }
 
     @FXML
     private void getAllOrders(ActionEvent event) {
+        //TODO tela com compras do cliente
     }
     
     @Override

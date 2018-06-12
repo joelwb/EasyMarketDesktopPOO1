@@ -25,6 +25,7 @@
                   <Insets top="24.0" />
                </VBox.margin>
             </Button>
+            <Button fx:id="selectButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectForn" text="Selecionar" />
             <Button maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getAllLotes" text="Lotes fornecidos" />
          </children>
          <padding>

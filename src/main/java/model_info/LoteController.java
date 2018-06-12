@@ -13,9 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import main.MainButtonClickListener;
+import modelo.supermercado.mercadoria.Fornecedor;
 import modelo.supermercado.mercadoria.Lote;
+import modelo.supermercado.mercadoria.Produto;
 
 /**
  * FXML Controller class
@@ -23,8 +26,8 @@ import modelo.supermercado.mercadoria.Lote;
  * @author joel-
  */
 public class LoteController implements Initializable {
-    private Lote lote;
-    private MainButtonClickListener listener;
+    private final Lote lote;
+    private final MainButtonClickListener listener;
     
     
     @FXML
@@ -36,7 +39,7 @@ public class LoteController implements Initializable {
     @FXML
     private DatePicker dataVal;
     @FXML
-    private Spinner<?> qtdUnidades;
+    private Spinner<Integer> qtdUnidades;
     @FXML
     private TextField codigoProd;
     @FXML
@@ -62,7 +65,15 @@ public class LoteController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        qtdUnidades.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 500000, 0));
+        
+        if (lote == null) {     //é cadastro
+            apagar.setVisible(false);
+            apagar.setManaged(false);
+        }else {                 //é consulta
+            cancel.setText("Voltar");
+            inicializaCampos();
+        }
     }    
 
     @FXML
@@ -79,4 +90,15 @@ public class LoteController implements Initializable {
     private void apagar(ActionEvent event) {
     }
     
+    private void inicializaCampos(){
+        
+    }
+    
+    public void setFornecedor(Fornecedor fornecedor){
+        
+    }
+    
+    public void setProduto(Produto prod){
+        
+    }
 }

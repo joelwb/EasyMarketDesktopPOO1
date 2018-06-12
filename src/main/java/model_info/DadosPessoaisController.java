@@ -6,6 +6,7 @@ package model_info;
  * and open the template in the editor.
  */
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,11 +22,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import main.MainButtonClickListener;
+import modelo.usuarios.Cliente;
 import modelo.usuarios.Endereco;
 import modelo.usuarios.Endereco.Estado;
 import modelo.usuarios.Funcionario;
+import modelo.usuarios.PessoaFisica;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import static util.ConversorDataObjs.toLocalDate;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -35,14 +39,13 @@ import static util.ConversorDataObjs.toLocalDate;
 public class DadosPessoaisController implements Initializable {
 
     private Funcionario funcionario;
+    private Cliente cliente;
     private MainButtonClickListener listener;
 
     @FXML
     private TextField email;
     @FXML
     private CustomPasswordField senha;
-    @FXML
-    private Button changeSenha;
     @FXML
     private TextField nome;
     @FXML
@@ -70,7 +73,7 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private TextField cidade;
     @FXML
-    private ChoiceBox<String> estado;
+    private ChoiceBox<Estado> estado;
     @FXML
     private Button addContato;
     @FXML
@@ -78,7 +81,7 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private Button removeContato;
     @FXML
-    private TableView<String> contatosTable;
+    private TableView<List<String>> contatosTable;
     @FXML
     private Button cancel;
     @FXML
@@ -91,6 +94,11 @@ public class DadosPessoaisController implements Initializable {
         this.listener = listener;
     }
 
+    public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException {
+        Util.verificaIsObjNull(cliente, "Cliente");
+        this.cliente = cliente;
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -101,70 +109,84 @@ public class DadosPessoaisController implements Initializable {
         numero.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
 
         for (Estado e : Estado.values()) {
-            estado.getItems().add(e.toString());
+            estado.getItems().add(e);
         }
 
-        if (funcionario == null) {              //é cadastro
+        if (funcionario == null && cliente == null) {   //é cadastro de funcionario
             senhaConteiner.setVisible(false);
             senhaConteiner.setManaged(false);
             save.setText("Cadastrar");
-        } else {                                //não é cadastro
+        } else {
             senha.setDisable(true);
             cpf.setDisable(true);
             masculino.setDisable(true);
             feminino.setDisable(true);
             dataNasc.setDisable(true);
-            
             cancel.setText("Voltar");
             
-            inicializaCampos();
+            if (funcionario != null) {                  //é consulta de fucionario
+                setor.setText(funcionario.getSetor());
+                cargo.setText(funcionario.getCargo());
+
+                inicializaCamposPessoaFisica(funcionario);
+            } else {                                     //é consulta de cliente
+                inicializaCamposPessoaFisica(cliente);
+            }
         }
     }
 
     @FXML
-    private void cancel(ActionEvent event) {
+    private void cancel(ActionEvent event
+    ) {
         listener.cancel();
     }
 
     @FXML
-    private void save(ActionEvent event) {
+    private void save(ActionEvent event
+    ) {
         listener.save();
     }
-    
+
     @FXML
-    private void addContato(ActionEvent event) {
+    private void addContato(ActionEvent event
+    ) {
     }
 
     @FXML
-    private void editContato(ActionEvent event) {
+    private void editContato(ActionEvent event
+    ) {
     }
 
     @FXML
-    private void removeContato(ActionEvent event) {
+    private void removeContato(ActionEvent event
+    ) {
     }
 
-    private void inicializaCampos() {
-        email.setText(funcionario.getLogin());
-        senha.setText(funcionario.getSenha());
+    @FXML
+    private void changeSenha(ActionEvent event
+    ) {
+    }
 
-        nome.setText(funcionario.getNome());
-        cpf.setText(funcionario.getCpf());
-        if (funcionario.getGenero().toChar() == 'M') generoGroup.selectToggle(masculino);
-        else generoGroup.selectToggle(feminino);
-        dataNasc.setValue(toLocalDate(funcionario.getDataNasc()));
+    private void inicializaCamposPessoaFisica(PessoaFisica pf) {
+        email.setText(pf.getLogin());
+        senha.setText(pf.getSenha());
 
-        setor.setText(funcionario.getSetor());
-        cargo.setText(funcionario.getCargo());
+        nome.setText(pf.getNome());
+        cpf.setText(pf.getCpf());
+        if (pf.getGenero().toChar() == 'M') {
+            generoGroup.selectToggle(masculino);
+        } else {
+            generoGroup.selectToggle(feminino);
+        }
+        dataNasc.setValue(toLocalDate(pf.getDataNasc()));
 
-        Endereco endereco = funcionario.getEndereco();
+        Endereco endereco = pf.getEndereco();
         cep.setText(endereco.getCep());
         rua.setText(endereco.getRuaAvenida());
         numero.getValueFactory().setValue(endereco.getNumero());
         bairro.setText(endereco.getBairro());
         cidade.setText(endereco.getCidade());
-        estado.setValue(endereco.getEstado().toString());
+        estado.setValue(endereco.getEstado());
     }
-    
-    
 
 }

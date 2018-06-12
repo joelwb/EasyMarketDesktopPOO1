@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package search;
+package filter;
 
-import search.filter.FilterComunication;
-import search.filter.FilterData;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import main.MainButtonClickListener;
-import search.filter.component.FilterItemView;
+import filter.component.FilterItemView;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
 
@@ -28,7 +26,7 @@ import org.controlsfx.control.PropertySheet.Item;
  *
  * @author joel-
  */
-public class BuscaController implements Initializable {
+public class FiltroController implements Initializable {
     private FilterComunication filterComunc;
     private MainButtonClickListener listener;
 
@@ -37,7 +35,7 @@ public class BuscaController implements Initializable {
     @FXML
     private VBox content;
 
-    public BuscaController(MainButtonClickListener listener) {
+    public FiltroController(MainButtonClickListener listener) {
         this.listener = listener;
     }
     

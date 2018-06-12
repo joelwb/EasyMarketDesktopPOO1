@@ -5,8 +5,9 @@
  */
 package search;
 
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import filter.FiltroController;
+import filter.FilterComunication;
+import filter.FilterData;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,12 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import model_info.LoteController;
+import modelo.supermercado.Supermercado;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -24,15 +29,39 @@ import javafx.scene.control.TableView;
  * @author joel-
  */
 public class BuscaProdutoController implements Initializable, FilterComunication {
+    private final Supermercado supermercado;
+    private LoteController lc;
+    
     @FXML
     private TableView<?> prodTable;
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
     private TableColumn<?, ?> codCol;
+    @FXML
+    private Button selectButton;
     
     
-    public BuscaProdutoController(BuscaController bc) {
+    public BuscaProdutoController(FiltroController bc, Supermercado supermercado) {
+        this.supermercado = supermercado;
+        
+        List<FilterData> filters = new ArrayList<>();
+        
+        filters.add(new FilterData("Nome", "Produto", String.class));
+        filters.add(new FilterData("Marca", "Produto", String.class));
+        filters.add(new FilterData("Tipo", "Produto", String.class));
+        filters.add(new FilterData("Código", "Produto", String.class));
+        
+        bc.setFilters(filters);
+    }
+    
+    public BuscaProdutoController(FiltroController bc, Supermercado supermercado, LoteController lc) throws IllegalArgumentException{
+        this.supermercado = supermercado;
+        
+        Util.verificaIsObjNull(lc, "LoteController");
+        
+        this.lc = lc;
+        
         List<FilterData> filters = new ArrayList<>();
         
         filters.add(new FilterData("Nome", "Produto", String.class));
@@ -48,20 +77,31 @@ public class BuscaProdutoController implements Initializable, FilterComunication
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (lc == null) {
+            selectButton.setVisible(false);
+            selectButton.setManaged(false);
+        }
     }    
 
     @FXML
     private void getDetalhes(ActionEvent event) {
+        //TODO Abrir Produto no ProdutoController
         
     }
 
     @FXML
     private void getAllLotes(ActionEvent event) {
+        //TODO Chamar BuscaLotesController para exibir os lotes
     }
 
     @FXML
     private void getLotesNestVencim(ActionEvent event) {
+        //TODO Chamar BuscaLotesController para exibir os lotes
+    }
+    
+    @FXML
+    private void selectProd(ActionEvent event) {
+        //TODO Setar produto no LoteController
     }
 
     @Override

@@ -6,6 +6,7 @@ package search;
  * and open the template in the editor.
  */
 
+import filter.FiltroController;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import modelo.supermercado.Supermercado;
+import filter.FilterComunication;
+import filter.FilterData;
+import javafx.scene.control.Button;
+import model_info.LoteController;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -25,16 +30,36 @@ import search.filter.FilterData;
  * @author joel-
  */
 public class BuscaFornecedorController implements Initializable, FilterComunication {
-
+    private final Supermercado supermercado;
+    private LoteController lc;
+    
     @FXML
     private TableView<?> fornTable;
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
     private TableColumn<?, ?> cnpjCol;
+    @FXML
+    private Button selectButton;
 
-    public BuscaFornecedorController(BuscaController bc) {
+public BuscaFornecedorController(FiltroController bc, Supermercado supermercado) {
+        this.supermercado = supermercado;
+    
+        List<FilterData> filters = new ArrayList<>();
         
+        filters.add(new FilterData("Nome", "Fornecedor", String.class));
+        filters.add(new FilterData("CNPJ", "Fornecedor", String.class));
+        
+        bc.setFilters(filters);
+    }
+
+public BuscaFornecedorController(FiltroController bc, Supermercado supermercado, LoteController lc) throws IllegalArgumentException{
+        this.supermercado = supermercado;
+        
+        Util.verificaIsObjNull(lc, "LoteController");
+        
+        this.lc = lc;
+    
         List<FilterData> filters = new ArrayList<>();
         
         filters.add(new FilterData("Nome", "Fornecedor", String.class));
@@ -48,15 +73,25 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (lc == null) {
+            selectButton.setVisible(false);
+            selectButton.setManaged(false);
+        }
     }    
 
     @FXML
     private void getDetalhes(ActionEvent event) {
+        //TODO Abrir Fornecedor no FornecedorController
     }
 
     @FXML
     private void getAllLotes(ActionEvent event) {
+        //TODO Chamar BuscaLotesController para exibir os lotes
+    }
+    
+    @FXML
+    private void selectForn(ActionEvent event) {
+        //TODO Setar Fornecedor no LoteController
     }
 
     @Override

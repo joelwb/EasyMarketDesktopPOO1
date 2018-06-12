@@ -5,10 +5,9 @@
  */
 package search;
 
+import filter.FiltroController;
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +18,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import modelo.supermercado.Supermercado;
+import filter.FilterComunication;
+import filter.FilterData;
+import modelo.supermercado.mercadoria.Lote;
 import static util.ConversorDataObjs.toDate;
 
 /**
@@ -29,7 +30,8 @@ import static util.ConversorDataObjs.toDate;
  * @author joel-
  */
 public class BuscaLoteController implements Initializable, FilterComunication {
-
+    private final Supermercado supermercado;
+    
     @FXML
     private TableView<?> LoteTable;
     @FXML
@@ -37,7 +39,9 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     @FXML
     private TableColumn<?, ?> codProdCol;
 
-    public BuscaLoteController(BuscaController bc) {
+    public BuscaLoteController(FiltroController bc, Supermercado supermercado) {
+        this.supermercado = supermercado;
+        
         List<FilterData> filters = new ArrayList<>();
 
         filters.add(new FilterData("Identificador", "Lote", String.class));
@@ -51,6 +55,11 @@ public class BuscaLoteController implements Initializable, FilterComunication {
 
         bc.setFilters(filters);
     }
+    
+    public BuscaLoteController(List<Lote> lotes, Supermercado supermercado){
+        this.supermercado = supermercado;
+        //TODO Add lotes to table
+    }
 
     /**
      * Initializes the controller class.
@@ -62,14 +71,17 @@ public class BuscaLoteController implements Initializable, FilterComunication {
 
     @FXML
     private void getDetalhesLote(ActionEvent event) {
+        //TODO Abrir Lote no LoteController
     }
 
     @FXML
     private void getDetalhesProd(ActionEvent event) {
+        //TODO Abrir Produto no ProdutoController
     }
 
     @FXML
     private void getDetalhesForn(ActionEvent event) {
+        //TODO Abrir Fornecedor no FornecedorController
     }
 
     @Override
@@ -84,5 +96,4 @@ public class BuscaLoteController implements Initializable, FilterComunication {
         Date dataCompraMax = toDate((LocalDate) response.get("Data Compra Máx"));
     }
 
-    
 }

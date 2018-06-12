@@ -16,9 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import search.BuscaController;
-import search.filter.FilterComunication;
-import search.filter.FilterData;
+import filter.FiltroController;
+import filter.FilterComunication;
+import filter.FilterData;
+import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
 
 /**
@@ -28,9 +29,10 @@ import static util.ConversorDataObjs.toDate;
  */
 public class RelatorioMeioPagController implements Initializable, FilterComunication {
     private RelatorioMeioPagController.TipoRelatorio tipo;
+    private final Supermercado supermercado;
     
     @FXML
-    private TableView<?> pessoaFisicaTable;
+    private TableView<?> tableRelatorio;
     @FXML
     private TableColumn<?, ?> nameCol;
     @FXML
@@ -48,8 +50,9 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
         public String getTipo(){return tipo;}
     }
 
-    public RelatorioMeioPagController(BuscaController bc, RelatorioMeioPagController.TipoRelatorio tipo) {
+    public RelatorioMeioPagController(FiltroController bc, RelatorioMeioPagController.TipoRelatorio tipo, Supermercado supermercado) {
         this.tipo = tipo;
+        this.supermercado = supermercado;
         
         List<FilterData> filters = new ArrayList<>();
         

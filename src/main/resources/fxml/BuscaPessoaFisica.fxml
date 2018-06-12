@@ -20,12 +20,12 @@
       </TableView>
       <VBox alignment="TOP_CENTER" maxWidth="250.0" spacing="16.0">
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getDetalhes" text="Detalhes">
+            <Button maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getDetalhes" text="Detalhes">
                <VBox.margin>
                   <Insets top="24.0" />
                </VBox.margin>
             </Button>
-            <Button maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getAllOrders" text="Todas as compras" />
+            <Button fx:id="ordersButton" maxWidth="1.7976931348623157E308" minWidth="175.0" mnemonicParsing="false" onAction="#getAllOrders" text="Todas as compras" />
          </children>
          <padding>
             <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

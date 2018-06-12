@@ -55,7 +55,7 @@
                               <HBox>
                                  <children>
                                     <CustomPasswordField fx:id="senha" minWidth="200.0" />
-                                    <Button fx:id="changeSenha" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Button">
+                                    <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#changeSenha" text="Button">
                                        <graphic>
                                           <MaterialDesignIconView glyphName="PENCIL" size="18" />
                                        </graphic>

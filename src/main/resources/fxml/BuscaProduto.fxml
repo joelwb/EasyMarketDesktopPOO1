@@ -25,6 +25,7 @@
                   <Insets top="24.0" />
                </VBox.margin>
             </Button>
+            <Button fx:id="selectButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectProd" text="Selecionar" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getAllLotes" text="Todos os Lotes" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getLotesNestVencim" text="Lotes próximos do vencimento" />
          </children>
