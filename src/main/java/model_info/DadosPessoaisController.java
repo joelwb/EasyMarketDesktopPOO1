@@ -6,9 +6,6 @@ package model_info;
  * and open the template in the editor.
  */
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +25,7 @@ import modelo.usuarios.Endereco;
 import modelo.usuarios.Endereco.Estado;
 import modelo.usuarios.Funcionario;
 import org.controlsfx.control.textfield.CustomPasswordField;
+import static util.ConversorDataObjs.toLocalDate;
 
 /**
  * FXML Controller class
@@ -88,16 +86,9 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private VBox senhaConteiner;
 
-    
-
     public DadosPessoaisController(Funcionario funcionario, MainButtonClickListener listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("listener nulo!!");
-        }
-
         this.funcionario = funcionario;
         this.listener = listener;
-
     }
 
     /**
@@ -174,8 +165,6 @@ public class DadosPessoaisController implements Initializable {
         estado.setValue(endereco.getEstado().toString());
     }
     
-    public static LocalDate toLocalDate(Date date) {
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
+    
 
 }

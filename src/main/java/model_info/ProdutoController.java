@@ -5,7 +5,6 @@ package model_info;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -16,6 +15,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import main.MainButtonClickListener;
+import modelo.supermercado.mercadoria.Produto;
 
 /**
  * FXML Controller class
@@ -23,6 +24,8 @@ import javafx.scene.control.TextField;
  * @author joel-
  */
 public class ProdutoController implements Initializable {
+    private Produto prod;
+    private MainButtonClickListener listener;
 
     @FXML
     private Button cancel;
@@ -47,21 +50,27 @@ public class ProdutoController implements Initializable {
     @FXML
     private TextArea descricao;
 
+    public ProdutoController(Produto prod, MainButtonClickListener listener) {
+        this.prod = prod;
+        this.listener = listener;
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        custo.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000,0,0.5));
-    }    
+        custo.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0, 0.5));
+    }
 
     @FXML
     private void cancel(ActionEvent event) {
+        listener.cancel();
     }
 
     @FXML
     private void save(ActionEvent event) {
+        listener.save();
     }
 
-    
 }

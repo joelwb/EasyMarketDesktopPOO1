@@ -2,11 +2,8 @@ package main;
 
 import model_info.DadosPessoaisController;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -14,14 +11,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import modelo.usuarios.Endereco;
+import javafx.stage.Stage;
+import model_info.LoteController;
+import model_info.ProdutoController;
+import modelo.supermercado.Supermercado;
 import modelo.usuarios.Funcionario;
-import modelo.usuarios.PessoaFisica;
+import report.RelatorioClienteController;
+import report.RelatorioMeioPagController;
+import report.RelatorioProdutoController;
 import search.BuscaController;
 import search.BuscaFornecedorController;
 import search.BuscaLoteController;
@@ -31,11 +31,16 @@ import search.BuscaProdutoController;
 public class FXMLController implements Initializable, MainButtonClickListener {
 
     private List<Parent> screenStack;
+    private final Supermercado market;
+    private final Funcionario funcionario;
 
     @FXML
     private HBox content;
-    @FXML
-    private Label bemVindo;
+
+    public FXMLController(Supermercado market, Funcionario funcionario) {
+        this.market = market;
+        this.funcionario = funcionario;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -70,26 +75,6 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void openDadosPessoais(ActionEvent event) throws IOException {
-        Endereco endereco = new Endereco("Manguinhos", "29871-475", "Serra", Endereco.Estado.ES, 52, "IFES");
-        Funcionario funcionario;
-
-        //esse erro é apenas um teste
-        try {
-            funcionario = new Funcionario("Gerente", "Vendas", "131.117.850-33", new Date(), PessoaFisica.Genero.M, "joel@gmail.com", "Tesha2", "Joel", endereco);
-        } catch (UnsupportedEncodingException | IllegalArgumentException | NoSuchAlgorithmException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            if (ex instanceof IllegalArgumentException) {
-                alert.setTitle("Erro!");
-                alert.setContentText(ex.getMessage());
-            } else {
-                alert.setContentText("Erro Interno!");
-                alert.setContentText("Entre em contato com o suporte!");
-            }
-
-            alert.showAndWait();
-            return;
-        }
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
 
         DadosPessoaisController controller = new DadosPessoaisController(funcionario, this);
@@ -109,21 +94,33 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     @FXML
     private void cadastrarProduto(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
+        ProdutoController pc = new ProdutoController(null, this);
+        loader.setController(pc);
+        
         addScreen(loader);
     }
 
     @FXML
     private void cadastrarLote(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lote.fxml"));
+        LoteController lc = new LoteController(null, this);
+        loader.setController(lc);
+        
         addScreen(loader);
     }
-
-    @FXML
-    private void buscarFornecedores(ActionEvent event) throws IOException {
+    
+    private BuscaController getNewBuscaController() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
         BuscaController bc = new BuscaController(this);
         loader.setController(bc);
         addScreen(loader);
+        
+        return bc;
+    }
+
+    @FXML
+    private void buscarFornecedores(ActionEvent event) throws IOException {
+        BuscaController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
         BuscaFornecedorController bfc = new BuscaFornecedorController(bc);
@@ -136,10 +133,7 @@ public class FXMLController implements Initializable, MainButtonClickListener {
 
     @FXML
     private void buscarProdutos(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
-        BuscaController bc = new BuscaController(this);
-        loader.setController(bc);
-        addScreen(loader);
+        BuscaController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
         BuscaProdutoController bpc = new BuscaProdutoController(bc);
@@ -151,11 +145,8 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     }
 
     @FXML
-    private void buscaLote(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
-        BuscaController bc = new BuscaController(this);
-        loader.setController(bc);
-        addScreen(loader);
+    private void buscarLotes(ActionEvent event) throws IOException {
+        BuscaController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
         BuscaLoteController blc = new BuscaLoteController(bc);
@@ -167,20 +158,17 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     }
 
     @FXML
-    private void buscaCliente(ActionEvent event) throws IOException {
-        buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass.Cliente);
+    private void buscarClientes(ActionEvent event) throws IOException {
+        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Cliente);
     }
 
     @FXML
-    private void buscaFuncionario(ActionEvent event) throws IOException {
-        buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass.Funcionario);
+    private void buscarFuncionarios(ActionEvent event) throws IOException {
+        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Funcionario);
     }
     
-    private void buscaPessoaFisica(BuscaPessoaFisicaController.PessoaFisicaClass pf) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Busca.fxml"));
-        BuscaController bc = new BuscaController(this);
-        loader.setController(bc);
-        addScreen(loader);
+    private void buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass pf) throws IOException{
+        BuscaController bc = getNewBuscaController();
         
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaPessoaFisica.fxml"));
         BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(bc,pf);
@@ -189,5 +177,78 @@ public class FXMLController implements Initializable, MainButtonClickListener {
         subLoader.setController(bpfc);
         Parent subView = subLoader.load();
         bc.setContent(subView);
+    }
+
+    @FXML
+    private void showClientesMaisConsumistas(ActionEvent event) throws IOException {
+        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MAIS_CONSUMISTAS);
+    }
+
+    @FXML
+    private void showMediaConsumoClientes(ActionEvent event) throws IOException {
+        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MEDIA_CONSUMO);
+    }
+    
+    private void showRelatorioCliente(RelatorioClienteController.TipoRelatorio tr) throws IOException{
+        BuscaController bc = getNewBuscaController();
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioCliente.fxml"));
+        RelatorioClienteController rcc = new RelatorioClienteController(bc,tr);
+        bc.setFilterComunication(rcc);
+        
+        subLoader.setController(rcc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
+    }
+
+    @FXML
+    private void showProdMaisVend(ActionEvent event) throws IOException {
+        BuscaController bc = getNewBuscaController();
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioProduto.fxml"));
+        RelatorioProdutoController rpc = new RelatorioProdutoController(bc);
+        bc.setFilterComunication(rpc);
+        
+        subLoader.setController(rpc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
+    }
+
+    @FXML
+    private void showPagMaisUsado(ActionEvent event) throws IOException {
+        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO);
+    }
+
+    @FXML
+    private void showPagMaisRentavel(ActionEvent event) throws IOException {
+        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_RENTAVEL);
+    }
+    
+    private void showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio tr) throws IOException{
+        BuscaController bc = getNewBuscaController();
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioMeioPag.fxml"));
+        RelatorioMeioPagController rmpc = new RelatorioMeioPagController(bc,tr);
+        bc.setFilterComunication(rmpc);
+        
+        subLoader.setController(rmpc);
+        Parent subView = subLoader.load();
+        bc.setContent(subView);
+    }
+    
+    @FXML
+    private void logout(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
+        Parent root = loader.load();
+        
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("EasyMarket Desktop");
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(false);
+        
+        Stage thisStage = (Stage) content.getScene().getWindow();
+        thisStage.close();
     }
 }

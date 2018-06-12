@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import search.filter.FilterComunication;
 import search.filter.FilterData;
+import static util.ConversorDataObjs.toDate;
 
 /**
  * FXML Controller class
@@ -83,10 +84,5 @@ public class BuscaLoteController implements Initializable, FilterComunication {
         Date dataCompraMax = toDate((LocalDate) response.get("Data Compra Máx"));
     }
 
-    private Date toDate(LocalDate localDate) {
-        if (localDate == null) return null;
-        
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        return Date.from(instant);
-    }
+    
 }

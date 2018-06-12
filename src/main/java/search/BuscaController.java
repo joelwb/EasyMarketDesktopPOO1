@@ -19,7 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import main.MainButtonClickListener;
-import search.filter.component.CustomItemSheet;
+import search.filter.component.FilterItemView;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
 
@@ -59,7 +59,7 @@ public class BuscaController implements Initializable {
     
     public void setFilters(List<FilterData> filters) {
         for(FilterData fd : filters){
-            filter.getItems().add(new CustomItemSheet(
+            filter.getItems().add(new FilterItemView(
                     fd.getFilterName(),
                     fd.getFilterCategory(),
                     fd.getType()));

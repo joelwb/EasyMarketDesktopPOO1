@@ -15,6 +15,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import main.MainButtonClickListener;
+import modelo.supermercado.mercadoria.Fornecedor;
 
 /**
  * FXML Controller class
@@ -22,7 +24,9 @@ import javafx.scene.control.TextField;
  * @author joel-
  */
 public class FornecedorController implements Initializable {
-
+    private Fornecedor fornecedor;
+    private MainButtonClickListener listener;
+    
     @FXML
     private TextField nome;
     @FXML
@@ -44,6 +48,11 @@ public class FornecedorController implements Initializable {
     @FXML
     private Button cancel;
 
+    public FornecedorController(Fornecedor fornecedor, MainButtonClickListener listener) {
+        this.fornecedor = fornecedor;
+        this.listener = listener;
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -54,6 +63,7 @@ public class FornecedorController implements Initializable {
 
     @FXML
     private void back(ActionEvent event) {
+        listener.cancel();
     }
     
 }

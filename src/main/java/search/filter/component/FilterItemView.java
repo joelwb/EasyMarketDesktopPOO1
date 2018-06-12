@@ -14,20 +14,13 @@ import org.controlsfx.control.PropertySheet;
  * @author joel-
  * Essa classe sera usada para fazer os componentes com filtros futuramente
  */
-public class CustomItemSheet implements PropertySheet.Item{
+public class FilterItemView implements PropertySheet.Item{
     private String nome;
     private String categoria;
     private Object valor;
     private Class classe;
-
-    public CustomItemSheet(String nome, String categoria, Object valor) {
-        this.nome = nome;
-        this.categoria = categoria;
-        this.valor = valor;
-        this.classe = valor.getClass();
-    }
     
-    public CustomItemSheet(String nome, String categoria, Class classe) {
+    public FilterItemView(String nome, String categoria, Class classe) {
         this.nome = nome;
         this.categoria = categoria;
         this.classe = classe;

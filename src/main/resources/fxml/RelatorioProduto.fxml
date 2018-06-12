@@ -7,12 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="report.RelatorioProdutoController">
    <children>
       <TableView fx:id="prodTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" text="Nome" />
           <TableColumn fx:id="codCol" editable="false" prefWidth="75.0" text="Código" />
+            <TableColumn fx:id="codCol1" editable="false" prefWidth="75.0" text="Nº de Vendas" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
