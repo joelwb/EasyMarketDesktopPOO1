@@ -77,7 +77,7 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     private void openDadosPessoais(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
 
-        DadosPessoaisController controller = new DadosPessoaisController(funcionario, this,market);
+        DadosPessoaisController controller = new DadosPessoaisController(funcionario, funcionario, this,market);
         loader.setController(controller);
         addScreen(loader);
     }
@@ -86,7 +86,7 @@ public class FXMLController implements Initializable, MainButtonClickListener {
     private void cadastrarFuncionario(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
 
-        DadosPessoaisController controller = new DadosPessoaisController(null, this,market);
+        DadosPessoaisController controller = new DadosPessoaisController(null,funcionario, this,market);
         loader.setController(controller);
         addScreen(loader);
     }

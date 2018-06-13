@@ -125,7 +125,7 @@
                   </FlowPane>
                     </content>
                 </TitledPane>
-            <TitledPane collapsible="false" text="Trabalho" textFill="#ff6d00">
+            <TitledPane fx:id="secaoTrab" collapsible="false" text="Trabalho" textFill="#ff6d00">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -245,8 +245,8 @@
                         </FlowPane>
                         <TableView fx:id="contatosTable" maxHeight="1.7976931348623157E308" maxWidth="500.0" minHeight="200.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn prefWidth="135.0" text="Contato" />
-                            <TableColumn minWidth="0.0" prefWidth="239.0" text="Tipo" />
+                            <TableColumn editable="false" prefWidth="135.0" text="Contato" />
+                            <TableColumn editable="false" minWidth="0.0" prefWidth="239.0" text="Tipo" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
