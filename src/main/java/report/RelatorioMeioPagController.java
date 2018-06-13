@@ -18,7 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import filter.FiltroController;
 import filter.FilterComunication;
-import filter.FilterData;
+import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
 

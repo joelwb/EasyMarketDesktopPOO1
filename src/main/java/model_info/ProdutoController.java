@@ -24,7 +24,7 @@ import modelo.supermercado.mercadoria.Produto;
  * @author joel-
  */
 public class ProdutoController implements Initializable {
-    private Produto prod;
+    private final Produto prod;
     private MainButtonClickListener listener;
 
     @FXML
@@ -36,9 +36,9 @@ public class ProdutoController implements Initializable {
     @FXML
     private TextField tipo;
     @FXML
-    private Spinner<?> qtdPrateleira;
+    private Spinner<Integer> qtdPrateleira;
     @FXML
-    private Spinner<?> qtdEstoque;
+    private Spinner<Integer> qtdEstoque;
     @FXML
     private TextField marca;
     @FXML
@@ -46,7 +46,7 @@ public class ProdutoController implements Initializable {
     @FXML
     private Spinner<Double> custo;
     @FXML
-    private Spinner<?> preco;
+    private Spinner<Double> preco;
     @FXML
     private TextArea descricao;
 
@@ -60,7 +60,10 @@ public class ProdutoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        qtdPrateleira.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
+        qtdEstoque.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
         custo.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0, 0.5));
+        preco.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0, 0.5));
     }
 
     @FXML

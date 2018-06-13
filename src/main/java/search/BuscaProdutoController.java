@@ -7,7 +7,7 @@ package search;
 
 import filter.FiltroController;
 import filter.FilterComunication;
-import filter.FilterData;
+import filter.data.FilterData;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

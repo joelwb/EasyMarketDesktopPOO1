@@ -19,7 +19,7 @@ import javafx.scene.control.TableView;
 import modelo.supermercado.Supermercado;
 import modelo.usuarios.PessoaFisica;
 import filter.FilterComunication;
-import filter.FilterData;
+import filter.data.FilterData;
 import javafx.scene.control.Button;
 
 /**

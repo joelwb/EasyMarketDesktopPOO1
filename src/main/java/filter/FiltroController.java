@@ -5,6 +5,7 @@
  */
 package filter;
 
+import filter.data.FilterData;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;

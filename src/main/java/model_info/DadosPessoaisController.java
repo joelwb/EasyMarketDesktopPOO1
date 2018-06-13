@@ -131,7 +131,7 @@ public class DadosPessoaisController implements Initializable {
             feminino.setDisable(true);
             dataNasc.setDisable(true);
             cancel.setText("Voltar");
-            
+
             if (funcionario != null) {                  //é consulta de fucionario
                 setor.setText(funcionario.getSetor());
                 cargo.setText(funcionario.getCargo());

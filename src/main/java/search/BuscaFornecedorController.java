@@ -19,7 +19,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import modelo.supermercado.Supermercado;
 import filter.FilterComunication;
-import filter.FilterData;
+import filter.data.FilterData;
 import javafx.scene.control.Button;
 import model_info.LoteController;
 import util.Util;
