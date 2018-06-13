@@ -5,7 +5,12 @@ package model_info;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import database.usuarios.FuncionarioDAO;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -22,12 +27,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import main.MainButtonClickListener;
+import modelo.supermercado.Supermercado;
 import modelo.usuarios.Cliente;
 import modelo.usuarios.Endereco;
 import modelo.usuarios.Endereco.Estado;
 import modelo.usuarios.Funcionario;
 import modelo.usuarios.PessoaFisica;
 import org.controlsfx.control.textfield.CustomPasswordField;
+import static util.ConversorDataObjs.toDate;
 import static util.ConversorDataObjs.toLocalDate;
 import util.Util;
 
@@ -37,7 +44,7 @@ import util.Util;
  * @author joel-
  */
 public class DadosPessoaisController implements Initializable {
-
+    private Supermercado supermercado;
     private Funcionario funcionario;
     private Cliente cliente;
     private MainButtonClickListener listener;
@@ -89,8 +96,9 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private VBox senhaConteiner;
 
-    public DadosPessoaisController(Funcionario funcionario, MainButtonClickListener listener) {
+    public DadosPessoaisController(Funcionario funcionario, MainButtonClickListener listener, Supermercado supermercado) {
         this.funcionario = funcionario;
+        this.supermercado = supermercado;
         this.listener = listener;
     }
 
@@ -136,35 +144,66 @@ public class DadosPessoaisController implements Initializable {
     }
 
     @FXML
-    private void cancel(ActionEvent event
-    ) {
+    private void cancel(ActionEvent event) {
         listener.cancel();
     }
 
     @FXML
-    private void save(ActionEvent event
-    ) {
+    private void save(ActionEvent event) throws SQLException, ClassNotFoundException {
+        if (funcionario == null && cliente == null){    //é cadastro de funcionario
+            String email = this.email.getText();
+            String senha = this.cpf.getText();
+            String nome = this.nome.getText();
+            String cpf = this.cpf.getText();
+            RadioButton generoRB = (RadioButton) generoGroup.getSelectedToggle();
+            
+            PessoaFisica.Genero genero = null;
+            if (generoRB == masculino){
+                genero = PessoaFisica.Genero.M;
+            }else {
+                genero = PessoaFisica.Genero.F;
+            }
+            
+            Date dataNasc = toDate(this.dataNasc.getValue());
+            String setor = this.setor.getText();
+            String cargo = this.cargo.getText();
+            
+            String cep = this.cep.getText();
+            String rua = this.rua.getText();
+            int numero = this.numero.getValue();
+            String bairro = this.bairro.getText();
+            String cidade = this.cidade.getText();
+            Estado estado = this.estado.getValue();
+            
+            Endereco endereco = new Endereco(bairro, cep, cidade, estado, numero, rua);
+            
+            try{
+                Funcionario novoFuncionario = new Funcionario(cargo, setor, cpf, dataNasc, genero, email, senha, nome, endereco);
+                FuncionarioDAO.create(novoFuncionario, supermercado);
+            }catch (IllegalArgumentException | NoSuchAlgorithmException | UnsupportedEncodingException ex){
+                //TODO criar alert;
+                return;
+            }
+            
+        }
+        
         listener.save();
     }
 
     @FXML
-    private void addContato(ActionEvent event
-    ) {
+    private void addContato(ActionEvent event) {
     }
 
     @FXML
-    private void editContato(ActionEvent event
-    ) {
+    private void editContato(ActionEvent event) {
     }
 
     @FXML
-    private void removeContato(ActionEvent event
-    ) {
+    private void removeContato(ActionEvent event) {
     }
 
     @FXML
-    private void changeSenha(ActionEvent event
-    ) {
+    private void changeSenha(ActionEvent event) {
     }
 
     private void inicializaCamposPessoaFisica(PessoaFisica pf) {
