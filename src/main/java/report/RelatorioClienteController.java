@@ -22,6 +22,7 @@ import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -53,7 +54,11 @@ public class RelatorioClienteController implements Initializable, FilterComunica
         public String getTipo(){return tipo;}
     }
 
-    public RelatorioClienteController(FiltroController bc, RelatorioClienteController.TipoRelatorio tipo, Supermercado supermercado) {
+    public RelatorioClienteController(FiltroController bc, RelatorioClienteController.TipoRelatorio tipo, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(bc, "FiltroController");
+        Util.verificaIsObjNull(tipo, "Tipo do relatorio");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
+        
         this.tipo = tipo;
         this.supermercado = supermercado;
         

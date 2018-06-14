@@ -42,7 +42,9 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
     @FXML
     private Button selectButton;
 
-public BuscaFornecedorController(FiltroController bc, Supermercado supermercado) {
+public BuscaFornecedorController(FiltroController bc, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(bc, "FiltroController");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
         this.supermercado = supermercado;
     
         List<FilterData> filters = new ArrayList<>();
@@ -54,10 +56,11 @@ public BuscaFornecedorController(FiltroController bc, Supermercado supermercado)
     }
 
 public BuscaFornecedorController(FiltroController bc, Supermercado supermercado, LoteController lc) throws IllegalArgumentException{
-        this.supermercado = supermercado;
-        
+        Util.verificaIsObjNull(bc, "FiltroController");
         Util.verificaIsObjNull(lc, "LoteController");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
         
+        this.supermercado = supermercado;
         this.lc = lc;
     
         List<FilterData> filters = new ArrayList<>();

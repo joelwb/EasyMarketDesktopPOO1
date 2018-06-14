@@ -21,6 +21,7 @@ import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -50,7 +51,11 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
         public String getTipo(){return tipo;}
     }
 
-    public RelatorioMeioPagController(FiltroController bc, RelatorioMeioPagController.TipoRelatorio tipo, Supermercado supermercado) {
+    public RelatorioMeioPagController(FiltroController bc, RelatorioMeioPagController.TipoRelatorio tipo, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(bc, "FiltroController");
+        Util.verificaIsObjNull(tipo, "Tipo de relatório");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
+        
         this.tipo = tipo;
         this.supermercado = supermercado;
         
@@ -70,7 +75,7 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (tipo == RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO){
-            infoCol.setText("Nº Usuários");
+            infoCol.setText("Nº Usos");
         }else {
             infoCol.setText("Ganhos");
         }

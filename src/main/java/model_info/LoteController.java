@@ -74,6 +74,8 @@ public class LoteController implements Initializable {
             cancel.setText("Voltar");
             inicializaCampos();
         }
+        
+        //TODO se o listener for null retirar os botões
     }    
 
     @FXML

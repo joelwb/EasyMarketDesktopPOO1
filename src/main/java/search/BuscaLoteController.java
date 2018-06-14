@@ -23,6 +23,7 @@ import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.mercadoria.Lote;
 import static util.ConversorDataObjs.toDate;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -30,7 +31,7 @@ import static util.ConversorDataObjs.toDate;
  * @author joel-
  */
 public class BuscaLoteController implements Initializable, FilterComunication {
-    private final Supermercado supermercado;
+    private Supermercado supermercado;
     
     @FXML
     private TableView<?> LoteTable;
@@ -39,7 +40,9 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     @FXML
     private TableColumn<?, ?> codProdCol;
 
-    public BuscaLoteController(FiltroController bc, Supermercado supermercado) {
+    public BuscaLoteController(FiltroController bc, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(bc, "FiltroController");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
         this.supermercado = supermercado;
         
         List<FilterData> filters = new ArrayList<>();
@@ -56,8 +59,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
         bc.setFilters(filters);
     }
     
-    public BuscaLoteController(List<Lote> lotes, Supermercado supermercado){
-        this.supermercado = supermercado;
+    public BuscaLoteController(List<Lote> lotes){
         //TODO Add lotes to table
     }
 

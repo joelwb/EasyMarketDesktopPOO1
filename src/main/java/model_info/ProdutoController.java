@@ -64,6 +64,8 @@ public class ProdutoController implements Initializable {
         qtdEstoque.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
         custo.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0, 0.5));
         preco.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1000, 0, 0.5));
+        
+        //TODO se o listener for null retirar os botões
     }
 
     @FXML

@@ -21,6 +21,7 @@ import modelo.usuarios.PessoaFisica;
 import filter.FilterComunication;
 import filter.data.FilterData;
 import javafx.scene.control.Button;
+import util.Util;
 
 /**
  * FXML Controller class
@@ -54,9 +55,12 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         }
     }
     
-    public BuscaPessoaFisicaController(FiltroController bc, PessoaFisicaClass pf, Supermercado supermercado) {
-        this.supermercado = supermercado;
+    public BuscaPessoaFisicaController(FiltroController bc, PessoaFisicaClass pf, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(bc, "FiltroController");
+        Util.verificaIsObjNull(pf, "PessoaFisicaClass pf");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
         
+        this.supermercado = supermercado;
         this.pf = pf;
         
         List<FilterData> filters = new ArrayList<>();

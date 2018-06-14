@@ -116,19 +116,23 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private TitledPane secaoTrab;
 
-    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainButtonClickListener listener, Supermercado supermercado) {
-        //Descomentar Util.verificaIsObjNull(funcLogado, "Funcionario logado");
+    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainButtonClickListener listener, Supermercado supermercado) throws IllegalArgumentException{
+        Util.verificaIsObjNull(funcLogado, "Funcionario logado");
+        Util.verificaIsObjNull(supermercado, "Supermercado");
+        
         this.funcionario = funcAcessado;
         this.supermercado = supermercado;
         this.listener = listener;
         if (funcLogado == funcAcessado) {
             isPerfil = true;
         }
+        
     }
 
     public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException {
         Util.verificaIsObjNull(cliente, "Cliente");
         this.cliente = cliente;
+        //TODO retirar os botões
     }
 
     /**
@@ -136,6 +140,8 @@ public class DadosPessoaisController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //TODO se o listener for null retirar os botões
+        
         TableViewConfigurator.configure(contatosTable);
         masculino.setToggleGroup(generoGroup);
         feminino.setToggleGroup(generoGroup);
@@ -148,7 +154,6 @@ public class DadosPessoaisController implements Initializable {
             senhaConteiner.setManaged(false);
             save.setText("Cadastrar");
         } else {
-
             if (funcionario != null) {                  //é consulta ou perfil de fucionario
                 setor.setText(funcionario.getSetor());
                 cargo.setText(funcionario.getCargo());
