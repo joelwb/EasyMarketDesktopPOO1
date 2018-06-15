@@ -22,6 +22,7 @@ import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -34,13 +35,9 @@ public class RelatorioClienteController implements Initializable, FilterComunica
     private final Supermercado supermercado;
     
     @FXML
-    private TableView<?> tableRelatorio;
+    private TableView<List<String>> tableRelatorio;
     @FXML
-    private TableColumn<?, ?> nameCol;
-    @FXML
-    private TableColumn<?, ?> cpfCol;
-    @FXML
-    private TableColumn<?, ?> consumoCol;   
+    private TableColumn<List<String>, String> consumoCol;   
     
     public enum TipoRelatorio{
         MAIS_CONSUMISTAS("Consumo"), MEDIA_CONSUMO("Média de Consumo");
@@ -77,6 +74,7 @@ public class RelatorioClienteController implements Initializable, FilterComunica
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         consumoCol.setText(tipo.getTipo());
+        TableViewConfigurator.configure(tableRelatorio);
     }    
     
     

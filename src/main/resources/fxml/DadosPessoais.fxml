@@ -54,7 +54,7 @@
                               </Label>
                               <HBox>
                                  <children>
-                                    <CustomPasswordField fx:id="senha" minWidth="200.0" />
+                                    <CustomPasswordField fx:id="senha" disable="true" editable="false" minWidth="200.0" />
                                     <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#changeSenha" text="Button">
                                        <graphic>
                                           <MaterialDesignIconView glyphName="PENCIL" size="18" />
@@ -258,7 +258,7 @@
                 </TitledPane>
           </children>
       </VBox>
-      <ToolBar minHeight="40.0">
+      <ToolBar fx:id="toolbar" minHeight="40.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>

@@ -14,13 +14,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import modelo.supermercado.Supermercado;
 import modelo.usuarios.PessoaFisica;
 import filter.FilterComunication;
 import filter.data.FilterData;
 import javafx.scene.control.Button;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -33,11 +33,7 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
     private final Supermercado supermercado;
     
     @FXML
-    private TableColumn<?, ?> nameCol;
-    @FXML
-    private TableColumn<?, ?> cpfCol;
-    @FXML
-    private TableView<?> pessoaFisicaTable;
+    private TableView<List<String>> pessoaFisicaTable;
     @FXML
     private Button ordersButton;
 
@@ -65,9 +61,13 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         
         List<FilterData> filters = new ArrayList<>();
         
-        filters.add(new FilterData("Nome", pf.getClasse(), String.class));
-        filters.add(new FilterData("CPF", pf.getClasse(), String.class));
-        filters.add(new FilterData("Gênero", pf.getClasse(), PessoaFisica.Genero.class));
+        filters.add(new FilterData("Nome", "Dados Pessoais do" + pf.getClasse(), String.class));
+        filters.add(new FilterData("CPF", "Dados Pessoais do" + pf.getClasse(), String.class));
+        filters.add(new FilterData("Gênero", "Dados Pessoais do" + pf.getClasse(), PessoaFisica.Genero.class));
+        if (pf == PessoaFisicaClass.Funcionario){
+            filters.add(new FilterData("Setor", "Profissão", String.class));
+            filters.add(new FilterData("Cargo", "Profissão", String.class));
+        }
         
         bc.setFilters(filters);
     }
@@ -81,6 +81,8 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
             ordersButton.setVisible(false);
             ordersButton.setManaged(false);
         }
+        
+        TableViewConfigurator.configure(pessoaFisicaTable);
     }    
 
     @FXML
@@ -98,5 +100,7 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         String nome = (String) response.get("Nome");
         String marca = (String) response.get("CPF");
         String tipo = (String) response.get("Gênero");
+        
+        //Pegar lista de PessoasFisicas do BD
     }
 }

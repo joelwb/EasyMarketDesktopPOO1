@@ -15,13 +15,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import modelo.supermercado.Supermercado;
 import filter.FilterComunication;
 import filter.data.FilterData;
 import javafx.scene.control.Button;
-import model_info.LoteController;
+import model.details.LoteController;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -34,11 +34,7 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
     private LoteController lc;
     
     @FXML
-    private TableView<?> fornTable;
-    @FXML
-    private TableColumn<?, ?> nameCol;
-    @FXML
-    private TableColumn<?, ?> cnpjCol;
+    private TableView<List<String>> fornTable;
     @FXML
     private Button selectButton;
 
@@ -80,6 +76,8 @@ public BuscaFornecedorController(FiltroController bc, Supermercado supermercado,
             selectButton.setVisible(false);
             selectButton.setManaged(false);
         }
+        
+        TableViewConfigurator.configure(fornTable);
     }    
 
     @FXML
@@ -101,6 +99,7 @@ public BuscaFornecedorController(FiltroController bc, Supermercado supermercado,
     public void listenResponse(Map<String, Object> response) {
         String nome = (String) response.get("Nome");
         String cnpj = (String) response.get("CNPJ");
+        //Pegar lista de fornecedores do BD
     }
     
 }

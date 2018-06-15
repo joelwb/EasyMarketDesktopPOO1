@@ -15,13 +15,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import filter.FiltroController;
 import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -33,13 +33,7 @@ public class RelatorioProdutoController implements Initializable, FilterComunica
     private final Supermercado supermercado;
     
     @FXML
-    private TableView<?> tableRelatorio;
-    @FXML
-    private TableColumn<?, ?> nameCol;
-    @FXML
-    private TableColumn<?, ?> codCol;
-    @FXML
-    private TableColumn<?, ?> numVendasCol;
+    private TableView<List<String>> tableRelatorio;
 
     public RelatorioProdutoController(FiltroController bc, Supermercado supermercado) throws IllegalArgumentException{
         Util.verificaIsObjNull(bc, "FiltroController");
@@ -61,7 +55,7 @@ public class RelatorioProdutoController implements Initializable, FilterComunica
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        TableViewConfigurator.configure(tableRelatorio);
     }    
 
     @Override

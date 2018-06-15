@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="fornTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" text="Nome" />
-          <TableColumn fx:id="cnpjCol" editable="false" prefWidth="75.0" text="CNPJ" />
+          <TableColumn editable="false" prefWidth="75.0" text="Nome" />
+          <TableColumn editable="false" prefWidth="75.0" text="CNPJ" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

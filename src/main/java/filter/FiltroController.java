@@ -17,10 +17,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import main.MainButtonClickListener;
 import filter.component.FilterItemView;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
+import main.MainScreenListener;
 
 /**
  * FXML Controller class
@@ -29,14 +29,14 @@ import org.controlsfx.control.PropertySheet.Item;
  */
 public class FiltroController implements Initializable {
     private FilterComunication filterComunc;
-    private MainButtonClickListener listener;
+    private MainScreenListener listener;
 
     @FXML
     private PropertySheet filter;
     @FXML
     private VBox content;
 
-    public FiltroController(MainButtonClickListener listener) {
+    public FiltroController(MainScreenListener listener) {
         this.listener = listener;
     }
     
@@ -78,7 +78,7 @@ public class FiltroController implements Initializable {
 
     @FXML
     private void back(ActionEvent event) {
-        listener.cancel();
+        listener.pullScreen();
     }
 
 }

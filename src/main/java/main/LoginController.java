@@ -8,26 +8,24 @@ package main;
 import database.supermercado.SupermercadoDAO;
 import database.usuarios.FuncionarioDAO;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.security.auth.login.LoginException;
 import modelo.supermercado.Supermercado;
-import modelo.usuarios.Endereco;
 import modelo.usuarios.Funcionario;
 import util.AlertCreator;
+import util.Screen;
 
 /**
  * FXML Controller class
@@ -54,10 +52,11 @@ public class LoginController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
         Funcionario funcionario = null;
         Supermercado supermercado = null;
+
         try {
             funcionario = FuncionarioDAO.SignIn(email.getText(), senha.getText());
             supermercado = SupermercadoDAO.readSupermercadoByFuncionario(funcionario);
-        } catch (SQLException | ClassNotFoundException | LoginException ex) {
+        } catch (SQLException | ClassNotFoundException | LoginException | UnsupportedEncodingException | NoSuchAlgorithmException ex) {
             if (ex instanceof LoginException) {
                 AlertCreator.criarAlert(Alert.AlertType.WARNING, "Falha ao logar", "Não foi possivel logar", ex.getMessage());
             } else {
@@ -69,16 +68,8 @@ public class LoginController implements Initializable {
 
         FXMLController controller = new FXMLController(supermercado, funcionario);
         loader.setController(controller);
-        Parent root = loader.load();
 
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setTitle("EasyMarket Desktop");
-        stage.setScene(scene);
-        stage.show();
-        stage.setMinHeight(stage.getHeight());
-        stage.setMinWidth(stage.getWidth());
+        Screen.openNew(loader);
 
         Stage loginStage = (Stage) email.getScene().getWindow();
         loginStage.close();

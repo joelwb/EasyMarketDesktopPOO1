@@ -9,7 +9,6 @@ package main;
  *
  * @author joel-
  */
-public interface MainButtonClickListener {
-    void save();
-    void cancel();
+public interface MainScreenListener {
+    void pullScreen();
 }

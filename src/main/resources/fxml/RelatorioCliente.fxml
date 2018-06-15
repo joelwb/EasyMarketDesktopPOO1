@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="tableRelatorio" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" text="Nome" />
-          <TableColumn fx:id="cpfCol" editable="false" prefWidth="75.0" text="CPF" />
+          <TableColumn editable="false" prefWidth="75.0" text="Nome" />
+          <TableColumn editable="false" prefWidth="75.0" text="CPF" />
             <TableColumn fx:id="consumoCol" editable="false" prefWidth="75.0" text="Consumo" />
         </columns>
          <columnResizePolicy>

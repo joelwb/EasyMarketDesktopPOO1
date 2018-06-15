@@ -78,7 +78,7 @@
                               <HBox spacing="8.0">
                                  <children>
                                     <TextField fx:id="codigoProd" editable="false" minWidth="200.0" promptText="Selecione o produto" />
-                                    <Button fx:id="searchProduto" mnemonicParsing="false" text="Buscar">
+                                    <Button fx:id="searchProduto" mnemonicParsing="false" onAction="#searchProd" text="Buscar">
                                        <graphic>
                                           <MaterialDesignIconView glyphName="MAGNIFY" size="18" />
                                        </graphic>
@@ -107,7 +107,7 @@
                               <HBox spacing="8.0">
                                  <children>
                                     <TextField fx:id="nomeFornecedor" editable="false" minWidth="200.0" promptText="Selecione o fornecedor" />
-                                    <Button fx:id="searchFornecedor" mnemonicParsing="false" text="Buscar">
+                                    <Button fx:id="searchFornecedor" mnemonicParsing="false" onAction="#searchFornec" text="Buscar">
                                        <graphic>
                                           <MaterialDesignIconView glyphName="MAGNIFY" size="18" />
                                        </graphic>

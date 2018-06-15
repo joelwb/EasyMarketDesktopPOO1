@@ -1,4 +1,4 @@
-package model_info;
+package model.details;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -38,8 +38,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
-import main.MainButtonClickListener;
 import modelo.supermercado.Supermercado;
 import modelo.usuarios.Cliente;
 import modelo.usuarios.Contato;
@@ -53,6 +53,7 @@ import static util.ConversorDataObjs.toDate;
 import static util.ConversorDataObjs.toLocalDate;
 import util.TableViewConfigurator;
 import util.Util;
+import main.MainScreenListener;
 
 /**
  * FXML Controller class
@@ -64,7 +65,7 @@ public class DadosPessoaisController implements Initializable {
     private Supermercado supermercado;
     private Funcionario funcionario;
     private Cliente cliente;
-    private MainButtonClickListener listener;
+    private MainScreenListener listener;
     private boolean isPerfil;
 
     @FXML
@@ -115,8 +116,10 @@ public class DadosPessoaisController implements Initializable {
     private VBox senhaConteiner;
     @FXML
     private TitledPane secaoTrab;
+    @FXML
+    private ToolBar toolBar;
 
-    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainButtonClickListener listener, Supermercado supermercado) throws IllegalArgumentException{
+    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainScreenListener listener, Supermercado supermercado) throws IllegalArgumentException{
         Util.verificaIsObjNull(funcLogado, "Funcionario logado");
         Util.verificaIsObjNull(supermercado, "Supermercado");
         
@@ -132,7 +135,6 @@ public class DadosPessoaisController implements Initializable {
     public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException {
         Util.verificaIsObjNull(cliente, "Cliente");
         this.cliente = cliente;
-        //TODO retirar os botões
     }
 
     /**
@@ -140,7 +142,10 @@ public class DadosPessoaisController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //TODO se o listener for null retirar os botões
+        if (listener == null) {         //Com certeza é consulta, ou de funcionario ou cliente
+            toolBar.setVisible(false);
+            toolBar.setManaged(false);
+        }
         
         TableViewConfigurator.configure(contatosTable);
         masculino.setToggleGroup(generoGroup);
@@ -174,7 +179,7 @@ public class DadosPessoaisController implements Initializable {
 
     @FXML
     private void cancel(ActionEvent event) {
-        listener.cancel();
+        listener.pullScreen();
     }
 
     @FXML
@@ -212,12 +217,12 @@ public class DadosPessoaisController implements Initializable {
                 //TODO usar fucionarioDAO.update();
             }
         } catch (UnsupportedEncodingException | ClassNotFoundException | IllegalArgumentException | NoSuchAlgorithmException | SQLException ex) {
-            exibeExececao(ex);
+            AlertCreator.exibeExececao(ex);
             return;
         }
 
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
-        listener.save();
+        listener.pullScreen();
     }
 
     @FXML
@@ -285,7 +290,9 @@ public class DadosPessoaisController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    if (!Util.criptografar(msac.getSenhaAtual()).equals(funcionario.getSenha())) {
+                    //TODO usar na versão criptografada do BD
+                    //if (!Util.criptografar(msac.getSenhaAtual()).equals(funcionario.getSenha())) {
+                    if (!msac.getSenhaAtual().equals(funcionario.getSenha())) {
                         Toolkit.getDefaultToolkit().beep();
                         msac.setVisibilityErroSenhaAtual(true);
                         event.consume();
@@ -294,7 +301,7 @@ public class DadosPessoaisController implements Initializable {
                         event.consume();
                     }
                 } catch (Exception ex) {
-                    exibeExececao(ex);
+                    AlertCreator.exibeExececao(ex);
                 }
             }
         });
@@ -304,8 +311,8 @@ public class DadosPessoaisController implements Initializable {
             String senhaNova = msac.getSenhaNova();
             try {
                 funcionario.setSenha(senhaNova);
-            } catch (Exception ex) {
-                exibeExececao(ex);
+            } catch (IllegalArgumentException ex) {
+                AlertCreator.exibeExececao(ex);
             }
         }
     }
@@ -337,14 +344,6 @@ public class DadosPessoaisController implements Initializable {
         senhaConteiner.setManaged(false);
         save.setVisible(false);
         save.setManaged(false);
-    }
-
-    private void exibeExececao(Exception ex) {
-        if (ex instanceof IllegalArgumentException) {
-            AlertCreator.criarAlert(Alert.AlertType.ERROR, "Erro!", ex.getMessage(), null);
-        } else {
-            AlertCreator.criarAlert(Alert.AlertType.ERROR, "Erro!", "Erro Interno!", "Procure o suporte para resolver seu problema");
-        }
     }
 
     private void inicializaCamposPessoaFisica(PessoaFisica pf) {

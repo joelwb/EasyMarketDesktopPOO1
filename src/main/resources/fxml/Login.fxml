@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -23,6 +25,9 @@
                <image>
                   <Image url="@../imagens/icone.png" />
                </image>
+               <effect>
+                  <Reflection topOpacity="0.12" />
+               </effect>
             </ImageView>
          </graphic>
       </Label>
@@ -40,7 +45,7 @@
                               <MaterialDesignIconView glyphName="EMAIL" size="24" />
                            </graphic>
                         </Label>
-                        <TextField fx:id="email" prefWidth="200.0" />
+                        <TextField fx:id="email" prefHeight="32.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="16.0">
@@ -53,13 +58,20 @@
                               <MaterialDesignIconView glyphName="LOCK" size="24" />
                            </graphic>
                         </Label>
-                        <PasswordField fx:id="senha" prefWidth="200.0" />
+                        <PasswordField fx:id="senha" prefHeight="32.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <HyperlinkLabel text="[Esqueceu a senha?]" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#login" prefHeight="30.0" style="-fx-border-width: 2; -fx-background-radius: 0; -fx-background-color: #a00; -fx-border-color: #eee;" text="Login" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="12.0" radius="5.5" width="12.0" />
+                     </effect>
+                  </Button>
                </children>
             </VBox>
-            <Button mnemonicParsing="false" onAction="#login" text="Login" />
          </children>
       </VBox>
    </children>

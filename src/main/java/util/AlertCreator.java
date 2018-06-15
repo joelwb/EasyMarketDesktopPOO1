@@ -23,4 +23,12 @@ public abstract class AlertCreator {
         Toolkit.getDefaultToolkit().beep();
         alert.showAndWait();
     }
+    
+    public static void exibeExececao(Exception ex) {
+        if (ex instanceof IllegalArgumentException) {
+            AlertCreator.criarAlert(Alert.AlertType.ERROR, "Erro!", ex.getMessage(), null);
+        } else {
+            AlertCreator.criarAlert(Alert.AlertType.ERROR, "Erro!", "Erro Interno!", "Procure o suporte para resolver seu problema");
+        }
+    }
 }

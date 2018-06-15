@@ -21,6 +21,7 @@ import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
 import static util.ConversorDataObjs.toDate;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -33,11 +34,9 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
     private final Supermercado supermercado;
     
     @FXML
-    private TableView<?> tableRelatorio;
+    private TableView<List<String>> tableRelatorio;
     @FXML
-    private TableColumn<?, ?> nameCol;
-    @FXML
-    private TableColumn<?, ?> infoCol;
+    private TableColumn<List<String>, String> infoCol;
 
     public enum TipoRelatorio{
         MAIS_RENTAVEL("Mais Rentável"), MAIS_UTILIZADO("Mais Utilizado");
@@ -79,6 +78,8 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
         }else {
             infoCol.setText("Ganhos");
         }
+        
+        TableViewConfigurator.configure(tableRelatorio);
     }    
     
     @Override
