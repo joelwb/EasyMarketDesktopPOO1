@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.PropertySheet?>
 
-<BorderPane maxWidth="1.7976931348623157E308" style="-fx-border-color: #ccc;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" style="-fx-border-color: #ccc;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="980.0" BorderPane.alignment="CENTER" />
    </center>
@@ -47,7 +47,7 @@
    <bottom>
       <ToolBar minHeight="40.0" BorderPane.alignment="CENTER">
          <items>
-            <Button cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
+            <Button fx:id="back" cancelButton="true" graphicTextGap="10.0" minWidth="100.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #a00;" text="Voltar" textFill="WHITE">
                <graphic>
                   <MaterialDesignIconView fill="WHITE" glyphName="KEYBOARD_BACKSPACE" size="20" />
                </graphic>

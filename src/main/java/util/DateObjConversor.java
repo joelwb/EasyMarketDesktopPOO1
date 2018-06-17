@@ -14,7 +14,7 @@ import java.time.ZoneId;
  *
  * @author joel-
  */
-public abstract class ConversorDataObjs {
+public abstract class DateObjConversor {
     public static LocalDate toLocalDate(java.util.Date date) {
         Date slqDate = new java.sql.Date(date.getTime());
         return slqDate.toLocalDate();

@@ -117,8 +117,6 @@ public class ProdutoController implements Initializable {
 
     @FXML
     private void save(ActionEvent event) {
-        //TODO salvar/cadastrar produto
-
         String nome = this.nome.getText();
         String tipo = this.tipo.getText();
         String marca = this.marca.getText();

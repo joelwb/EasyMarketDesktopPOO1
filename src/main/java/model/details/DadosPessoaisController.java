@@ -49,8 +49,8 @@ import modelo.usuarios.Funcionario;
 import modelo.usuarios.PessoaFisica;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import util.AlertCreator;
-import static util.ConversorDataObjs.toDate;
-import static util.ConversorDataObjs.toLocalDate;
+import static util.DateObjConversor.toDate;
+import static util.DateObjConversor.toLocalDate;
 import util.TableViewConfigurator;
 import util.Util;
 import main.MainScreenListener;
@@ -60,6 +60,7 @@ import main.MainScreenListener;
  *
  * @author joel-
  */
+//TODO testar com ano de nascimenot menor que 1970;
 public class DadosPessoaisController implements Initializable {
 
     private Supermercado supermercado;
@@ -119,17 +120,17 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private ToolBar toolBar;
 
-    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainScreenListener listener, Supermercado supermercado) throws IllegalArgumentException{
+    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainScreenListener listener, Supermercado supermercado) throws IllegalArgumentException {
         Util.verificaIsObjNull(funcLogado, "Funcionario logado");
         Util.verificaIsObjNull(supermercado, "Supermercado");
-        
+
         this.funcionario = funcAcessado;
         this.supermercado = supermercado;
         this.listener = listener;
         if (funcLogado == funcAcessado) {
             isPerfil = true;
         }
-        
+
     }
 
     public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException {
@@ -146,7 +147,7 @@ public class DadosPessoaisController implements Initializable {
             toolBar.setVisible(false);
             toolBar.setManaged(false);
         }
-        
+
         TableViewConfigurator.configure(contatosTable);
         masculino.setToggleGroup(generoGroup);
         feminino.setToggleGroup(generoGroup);
@@ -167,7 +168,11 @@ public class DadosPessoaisController implements Initializable {
 
                 if (!isPerfil) {
                     desabilitaEdicaoDados();            //é Consulta de funcionario
+                } else {
+                    setor.setDisable(true);
+                    cargo.setDisable(true);
                 }
+
             } else {                                    //é consulta de cliente
                 secaoTrab.setVisible(false);
                 secaoTrab.setManaged(false);
@@ -311,6 +316,7 @@ public class DadosPessoaisController implements Initializable {
             String senhaNova = msac.getSenhaNova();
             try {
                 funcionario.setSenha(senhaNova);
+                senha.setText(senhaNova);
             } catch (IllegalArgumentException ex) {
                 AlertCreator.exibeExececao(ex);
             }
@@ -368,7 +374,7 @@ public class DadosPessoaisController implements Initializable {
         estado.setValue(endereco.getEstado());
     }
 
-    private Alert getAlertContato(String title, DialogPane dg, final AddContatoAlertController acac){
+    private Alert getAlertContato(String title, DialogPane dg, final AddContatoAlertController acac) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText("Informe os dados:");

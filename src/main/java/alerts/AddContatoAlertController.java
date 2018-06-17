@@ -13,8 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import modelo.usuarios.Contato;
 import util.Util;
@@ -25,9 +25,11 @@ import util.Util;
  * @author joel-
  */
 public class AddContatoAlertController implements Initializable {
-
+    @FXML
     private TextField contato;
+    @FXML
     private ComboBox<Contato.Tipo> tipo;
+    @FXML
     private Label erro;
 
     /**
@@ -59,9 +61,10 @@ public class AddContatoAlertController implements Initializable {
     public Contato.Tipo getTipo() {
         return tipo.getValue();
     }
-
+    
+    @FXML
     private void contatoChange(KeyEvent event) {
-        if (tipo.getValue() == Contato.Tipo.EMAIL && !Util.isLoginValido(contato.getText())) {
+        if (tipo.getValue() == Contato.Tipo.EMAIL && !Util.isLoginValido(contato.getText()) ) {
             erro.setVisible(true);
         } else {
             erro.setVisible(false);

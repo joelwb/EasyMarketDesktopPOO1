@@ -56,8 +56,8 @@ public class LoginController implements Initializable {
         try {
             funcionario = FuncionarioDAO.SignIn(email.getText(), senha.getText());
             supermercado = SupermercadoDAO.readSupermercadoByFuncionario(funcionario);
-        } catch (SQLException | ClassNotFoundException | LoginException | UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            if (ex instanceof LoginException) {
+        } catch (IllegalArgumentException | SQLException | ClassNotFoundException | LoginException | UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+            if (ex instanceof LoginException || ex instanceof IllegalArgumentException) {
                 AlertCreator.criarAlert(Alert.AlertType.WARNING, "Falha ao logar", "Não foi possivel logar", ex.getMessage());
             } else {
                 AlertCreator.criarAlert(Alert.AlertType.ERROR, "Erro!", "Erro Interno!", "Procure o suporte para resolver seu problema");

@@ -7,27 +7,35 @@ package model.details;
 
 import database.supermercado.SupermercadoDAO;
 import database.supermercado.mercadoria.LoteDAO;
+import filter.FiltroController;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import modelo.supermercado.mercadoria.Fornecedor;
 import modelo.supermercado.mercadoria.Lote;
 import modelo.supermercado.mercadoria.Produto;
 import util.Util;
 import main.MainScreenListener;
 import modelo.supermercado.Supermercado;
+import search.BuscaFornecedorController;
+import search.BuscaProdutoController;
 import util.AlertCreator;
-import util.ConversorDataObjs;
+import util.DateObjConversor;
+import util.Screen;
 
 /**
  * FXML Controller class
@@ -111,9 +119,9 @@ public class LoteController implements Initializable {
         //TODO Verificar se vai ser possivel ou não atualizar dados do lote
 
         String identificador = this.identificador.getText();
-        Date dataCompra = ConversorDataObjs.toDate(this.dataCompra.getValue());
-        Date dataFabric = ConversorDataObjs.toDate(this.dataFabric.getValue());
-        Date dataVal = ConversorDataObjs.toDate(this.dataVal.getValue());
+        Date dataCompra = DateObjConversor.toDate(this.dataCompra.getValue());
+        Date dataFabric = DateObjConversor.toDate(this.dataFabric.getValue());
+        Date dataVal = DateObjConversor.toDate(this.dataVal.getValue());
         int qtdUnidade = this.qtdUnidades.getValue();
 
         if (fornecedor == null) {
@@ -161,6 +169,8 @@ public class LoteController implements Initializable {
     private void apagar(int id) {
         try {
             LoteDAO.delete(id);
+            AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Lote apagado com sucesso!", null);
+            ((Stage) qtdUnidades.getScene().getWindow()).close();
         } catch (SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);
         }
@@ -168,19 +178,63 @@ public class LoteController implements Initializable {
 
     @FXML
     private void searchProd(ActionEvent event) {
-        //TODO Abrir BuscaProduto
+        FiltroController fc;
+        try {
+            fc = getNewFilterController();
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
+        BuscaProdutoController bpc = new BuscaProdutoController(fc, supermercado, this);
+        fc.setFilterComunication(bpc);
+
+        subLoader.setController(bpc);
+        Parent subView = null;
+        
+        try {
+            subView = subLoader.load();
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        fc.setContent(subView);
     }
 
     @FXML
     private void searchFornec(ActionEvent event) {
-        //TODO Abrir BuscaFornec
+        FiltroController fc;
+        try {
+            fc = getNewFilterController();
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
+        BuscaFornecedorController bfc = new BuscaFornecedorController(fc, this);
+        fc.setFilterComunication(bfc);
+
+        subLoader.setController(bfc);
+        Parent subView = null;
+        
+        try {
+            subView = subLoader.load();
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        fc.setContent(subView);
     }
 
     private void inicializaCampos() {
         identificador.setText(lote.getIdentificador());
-        dataCompra.setValue(ConversorDataObjs.toLocalDate(lote.getDataCompra()));
-        dataFabric.setValue(ConversorDataObjs.toLocalDate(lote.getDataFabricacao()));
-        dataVal.setValue(ConversorDataObjs.toLocalDate(lote.getDataValidade()));
+        dataCompra.setValue(DateObjConversor.toLocalDate(lote.getDataCompra()));
+        dataFabric.setValue(DateObjConversor.toLocalDate(lote.getDataFabricacao()));
+        dataVal.setValue(DateObjConversor.toLocalDate(lote.getDataValidade()));
         codigoProd.setText(lote.getProduto().getCodigo());
         qtdUnidades.getValueFactory().setValue(lote.getNumUnidades());
         nomeFornecedor.setText(fornecedor.getNome());
@@ -214,5 +268,15 @@ public class LoteController implements Initializable {
     public void setProduto(Produto prod) {
         produto = prod;
         codigoProd.setText(prod.getCodigo());
+    }
+
+    private FiltroController getNewFilterController() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Filtro.fxml"));
+        FiltroController lc = new FiltroController(null);
+        loader.setController(lc);
+
+        Screen.openNew(loader);
+
+        return lc;
     }
 }

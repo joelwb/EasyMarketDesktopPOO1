@@ -6,6 +6,7 @@
 package model.details;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -58,6 +59,7 @@ public class FornecedorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         numero.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
+        estado.getItems().addAll(Arrays.asList(Endereco.Estado.values()));
         inicializaCampos();
     }    
 

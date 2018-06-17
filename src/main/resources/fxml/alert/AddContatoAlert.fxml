@@ -18,7 +18,7 @@
                   <HBox spacing="26.0">
                      <children>
                         <Label maxWidth="1.7976931348623157E308" text="Contato:" HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="contato" onKeyTyped="#contatoChange" prefWidth="150.0" />
+                        <TextField fx:id="contato" onKeyReleased="#contatoChange" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <Label fx:id="erro" text="Email inválido!" textFill="RED">

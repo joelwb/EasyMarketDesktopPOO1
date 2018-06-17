@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import filter.component.FilterItemView;
+import javafx.scene.control.Button;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
 import main.MainScreenListener;
@@ -35,6 +36,8 @@ public class FiltroController implements Initializable {
     private PropertySheet filter;
     @FXML
     private VBox content;
+    @FXML
+    private Button back;
 
     public FiltroController(MainScreenListener listener) {
         this.listener = listener;
@@ -45,6 +48,9 @@ public class FiltroController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (listener == null){
+            back.setVisible(false);
+        }
     }
 
     public void setContent(Parent view){

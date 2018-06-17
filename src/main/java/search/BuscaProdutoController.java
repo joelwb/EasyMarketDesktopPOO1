@@ -5,6 +5,7 @@
  */
 package search;
 
+import database.supermercado.mercadoria.LoteDAO;
 import database.supermercado.mercadoria.ProdutoDAO;
 import filter.FiltroController;
 import filter.FilterComunication;
@@ -16,18 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import model.details.LoteController;
 import model.details.ProdutoController;
 import modelo.supermercado.Supermercado;
+import modelo.supermercado.mercadoria.Lote;
 import modelo.supermercado.mercadoria.Produto;
 import util.AlertCreator;
 import util.Screen;
@@ -99,8 +99,6 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void getDetalhes(ActionEvent event) {
-        //TODO Abrir Produto no ProdutoController
-        
         int indxProd = prodTable.getSelectionModel().getSelectedIndex();
         if (indxProd == -1) return;
         
@@ -120,7 +118,28 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void getAllLotes(ActionEvent event) {
-        //TODO Chamar BuscaLotesController para exibir os lotes
+        int indxProd = prodTable.getSelectionModel().getSelectedIndex();
+        if (indxProd == -1) return;
+        
+        Produto prodSelected = produtos.get(indxProd);
+        
+        List<Lote> lotes;
+        try {
+            lotes = LoteDAO.readLotesByProduto(prodSelected);
+        } catch (SQLException | ClassNotFoundException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
+        BuscaLoteController blc = new BuscaLoteController(lotes);
+        loader.setController(blc);
+        
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @FXML
@@ -130,7 +149,13 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void selectProd(ActionEvent event) {
-        //TODO Setar produto no LoteController
+        int indxProd = prodTable.getSelectionModel().getSelectedIndex();
+        if (indxProd == -1) return;
+        
+        Produto prodSelected = produtos.get(indxProd);
+        
+        lc.setProduto(prodSelected);
+        ((Stage) selectButton.getScene().getWindow()).close();
     }
 
     @Override

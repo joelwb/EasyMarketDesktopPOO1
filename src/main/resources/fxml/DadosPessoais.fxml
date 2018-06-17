@@ -258,7 +258,7 @@
                 </TitledPane>
           </children>
       </VBox>
-      <ToolBar fx:id="toolbar" minHeight="40.0">
+      <ToolBar fx:id="toolBar" minHeight="40.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>

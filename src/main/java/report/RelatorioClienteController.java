@@ -21,7 +21,7 @@ import filter.FiltroController;
 import filter.FilterComunication;
 import filter.data.FilterData;
 import modelo.supermercado.Supermercado;
-import static util.ConversorDataObjs.toDate;
+import static util.DateObjConversor.toDate;
 import util.TableViewConfigurator;
 import util.Util;
 
@@ -93,5 +93,7 @@ public class RelatorioClienteController implements Initializable, FilterComunica
         Date dataMin = toDate((LocalDate) response.get("Data Min"));
         Date dataMax = toDate((LocalDate) response.get("Data Máx"));
         int lim = Integer.parseInt((String) response.get("Máx. Resultados"));
+        
+        //TODO Pegar dados no BD
     }
 }

@@ -5,6 +5,8 @@
  */
 package search;
 
+import database.supermercado.mercadoria.FornecedorDAO;
+import database.supermercado.mercadoria.LoteDAO;
 import filter.FiltroController;
 import java.net.URL;
 import java.time.LocalDate;
@@ -20,8 +22,18 @@ import javafx.scene.control.TableView;
 import modelo.supermercado.Supermercado;
 import filter.FilterComunication;
 import filter.data.FilterData;
+import java.io.IOException;
+import java.sql.SQLException;
+import javafx.fxml.FXMLLoader;
+import model.details.FornecedorController;
+import model.details.LoteController;
+import model.details.ProdutoController;
+import modelo.supermercado.mercadoria.Fornecedor;
 import modelo.supermercado.mercadoria.Lote;
-import static util.ConversorDataObjs.toDate;
+import modelo.supermercado.mercadoria.Produto;
+import util.AlertCreator;
+import static util.DateObjConversor.toDate;
+import util.Screen;
 import util.TableViewConfigurator;
 import util.Util;
 
@@ -31,17 +43,18 @@ import util.Util;
  * @author joel-
  */
 public class BuscaLoteController implements Initializable, FilterComunication {
+
     private Supermercado supermercado;
     private List<Lote> lotes;
-    
+
     @FXML
     private TableView<List<String>> loteTable;
 
-    public BuscaLoteController(FiltroController bc, Supermercado supermercado) throws IllegalArgumentException{
+    public BuscaLoteController(FiltroController bc, Supermercado supermercado) throws IllegalArgumentException {
         Util.verificaIsObjNull(bc, "FiltroController");
         Util.verificaIsObjNull(supermercado, "Supermercado");
         this.supermercado = supermercado;
-        
+
         List<FilterData> filters = new ArrayList<>();
 
         filters.add(new FilterData("Identificador", "Lote", String.class));
@@ -54,8 +67,8 @@ public class BuscaLoteController implements Initializable, FilterComunication {
 
         bc.setFilters(filters);
     }
-    
-    public BuscaLoteController(List<Lote> lotes){
+
+    public BuscaLoteController(List<Lote> lotes) {
         this.lotes = lotes;
     }
 
@@ -65,45 +78,110 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         TableViewConfigurator.configure(loteTable);
-        
-        if (lotes != null){
-            for (Lote lote : lotes){
-                List<String> row = new ArrayList<>();
-                row.add(lote.getIdentificador());
-                row.add(lote.getProduto().getCodigo());
-                
-                loteTable.getItems().add(row);
-            }
+
+        if (lotes != null) {
+            refreshTable();
         }
-        
     }
 
     @FXML
     private void getDetalhesLote(ActionEvent event) {
-        //TODO Abrir Lote no LoteController
+        int indxLote = loteTable.getSelectionModel().getSelectedIndex();
+        if (indxLote == -1) return;
+        
+        Lote lote = lotes.get(indxLote);
+        
+        Fornecedor fornecedor;
+        try {
+            fornecedor = FornecedorDAO.readFornecedorByLote(lote);
+        } catch (ClassNotFoundException | SQLException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lote.fxml"));
+        LoteController lc = new LoteController(lote, fornecedor);
+        loader.setController(lc);
+        
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @FXML
     private void getDetalhesProd(ActionEvent event) {
-        //TODO Abrir Produto no ProdutoController
+        int indxLote = loteTable.getSelectionModel().getSelectedIndex();
+        if (indxLote == -1) return;
+        
+        Produto prodSelected = lotes.get(indxLote).getProduto();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
+        ProdutoController pc = new ProdutoController(prodSelected);
+        loader.setController(pc);
+        
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @FXML
     private void getDetalhesForn(ActionEvent event) {
-        //TODO Abrir Fornecedor no FornecedorController
+        int indxLote = loteTable.getSelectionModel().getSelectedIndex();
+        if (indxLote == -1) return;
+        
+        Lote lote = lotes.get(indxLote);
+        
+        Fornecedor fornecedor;
+        try {
+            fornecedor = FornecedorDAO.readFornecedorByLote(lote);
+        } catch (ClassNotFoundException | SQLException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+        FornecedorController fc = new FornecedorController(fornecedor);
+        loader.setController(fc);
+        
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @Override
     public void listenResponse(Map<String, Object> response) {
         String identif = (String) response.get("Identificador");
-        Date dataFabricMin = toDate((LocalDate) response.get("Data Fabricação Min"));
-        Date dataFabricMax = toDate((LocalDate) response.get("Data Fabricação Máx"));
-        Date dataVencMin = toDate((LocalDate) response.get("Data Validade Min"));
-        Date dataVencMax = toDate((LocalDate) response.get("Data Validade Máx"));
+        Date dataFabMin = toDate((LocalDate) response.get("Data Fabricação Min"));
+        Date dataFabMax = toDate((LocalDate) response.get("Data Fabricação Máx"));
+        Date dataValMin = toDate((LocalDate) response.get("Data Validade Min"));
+        Date dataValMax = toDate((LocalDate) response.get("Data Validade Máx"));
         Date dataCompraMin = toDate((LocalDate) response.get("Data Compra Min"));
         Date dataCompraMax = toDate((LocalDate) response.get("Data Compra Máx"));
         
-        //Pegar lista de lotes do BD
+        try {
+            lotes = LoteDAO.readLotesBySupermercado(supermercado, identif, dataFabMin, dataFabMax, dataValMin, dataValMax, dataCompraMin, dataCompraMax);
+            refreshTable();
+        } catch (IllegalArgumentException | SQLException | ClassNotFoundException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
+    }
+
+    private void refreshTable() {
+        loteTable.getItems().clear();
+            
+        for (Lote lote : lotes) {
+            List<String> row = new ArrayList<>();
+            row.add(lote.getIdentificador());
+            row.add(lote.getProduto().getCodigo());
+
+            loteTable.getItems().add(row);
+        }
     }
 
 }

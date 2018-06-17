@@ -23,6 +23,9 @@ import report.RelatorioClienteController;
 import report.RelatorioMeioPagController;
 import report.RelatorioProdutoController;
 import filter.FiltroController;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TreeItem;
+import org.controlsfx.control.BreadCrumbBar;
 import search.BuscaFornecedorController;
 import search.BuscaLoteController;
 import search.BuscaPessoaFisicaController;
@@ -36,6 +39,10 @@ public class FXMLController implements Initializable, MainScreenListener {
 
     @FXML
     private HBox content;
+    @FXML
+    private BreadCrumbBar<String> navBar;
+    @FXML
+    private ScrollPane navBarConteiner;
 
     public FXMLController(Supermercado market, Funcionario funcionario) {
         this.market = market;
@@ -45,16 +52,29 @@ public class FXMLController implements Initializable, MainScreenListener {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         screenStack = new ArrayList<>();
+        
+        navBarConteiner.setVisible(false);
+        navBarConteiner.setManaged(false);
     }
 
-    private void addScreen(FXMLLoader loader) throws IOException {
+    private void addScreen(FXMLLoader loader, String screenName) throws IOException {
         Parent root = loader.load();
 
         screenStack.add((Parent) content.getChildren().get(0));
         content.getChildren().clear();
         HBox.setHgrow(root, Priority.ALWAYS);
         content.getChildren().add(root);
-
+        
+        TreeItem<String> screenCrumb = new TreeItem<>(screenName);
+        
+        if (navBar.getSelectedCrumb() != null){
+            navBar.getSelectedCrumb().getChildren().add(screenCrumb);
+        }
+        
+        navBarConteiner.setVisible(true);
+        navBarConteiner.setManaged(true);
+        
+        navBar.setSelectedCrumb(screenCrumb);
     }
 
     @FXML
@@ -63,7 +83,7 @@ public class FXMLController implements Initializable, MainScreenListener {
 
         DadosPessoaisController controller = new DadosPessoaisController(funcionario, funcionario, this, market);
         loader.setController(controller);
-        addScreen(loader);
+        addScreen(loader,"Dados Pessoais");
     }
 
     @FXML
@@ -72,7 +92,7 @@ public class FXMLController implements Initializable, MainScreenListener {
 
         DadosPessoaisController controller = new DadosPessoaisController(null, funcionario, this, market);
         loader.setController(controller);
-        addScreen(loader);
+        addScreen(loader, "Cadastro de Funcionário");
     }
 
     @FXML
@@ -81,7 +101,7 @@ public class FXMLController implements Initializable, MainScreenListener {
         ProdutoController pc = new ProdutoController(null, this,market);
         loader.setController(pc);
 
-        addScreen(loader);
+        addScreen(loader, "Cadastro de Produto");
     }
 
     @FXML
@@ -90,134 +110,134 @@ public class FXMLController implements Initializable, MainScreenListener {
         LoteController lc = new LoteController(null, this, market);
         loader.setController(lc);
 
-        addScreen(loader);
+        addScreen(loader, "Cadastro de Lote");
     }
 
-    private FiltroController getNewFiltroController() throws IOException {
+    private FiltroController getNewFiltroController(String screenName) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Filtro.fxml"));
-        FiltroController bc = new FiltroController(this);
-        loader.setController(bc);
-        addScreen(loader);
+        FiltroController fc = new FiltroController(this);
+        loader.setController(fc);
+        addScreen(loader, screenName);
 
-        return bc;
+        return fc;
     }
 
     @FXML
     private void buscarFornecedores(ActionEvent event) throws IOException {
-        FiltroController bc = getNewFiltroController();
+        FiltroController fc = getNewFiltroController("Busca de Fornecedores");
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
-        BuscaFornecedorController bfc = new BuscaFornecedorController(bc, market);
-        bc.setFilterComunication(bfc);
+        BuscaFornecedorController bfc = new BuscaFornecedorController(fc, market);
+        fc.setFilterComunication(bfc);
 
         subLoader.setController(bfc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void buscarProdutos(ActionEvent event) throws IOException {
-        FiltroController bc = getNewFiltroController();
+        FiltroController fc = getNewFiltroController("Busca de Produtos");
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
-        BuscaProdutoController bpc = new BuscaProdutoController(bc, market);
-        bc.setFilterComunication(bpc);
+        BuscaProdutoController bpc = new BuscaProdutoController(fc, market);
+        fc.setFilterComunication(bpc);
 
         subLoader.setController(bpc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void buscarLotes(ActionEvent event) throws IOException {
-        FiltroController bc = getNewFiltroController();
+        FiltroController fc = getNewFiltroController("Busca de Lotes");
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
-        BuscaLoteController blc = new BuscaLoteController(bc, market);
-        bc.setFilterComunication(blc);
+        BuscaLoteController blc = new BuscaLoteController(fc, market);
+        fc.setFilterComunication(blc);
 
         subLoader.setController(blc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void buscarClientes(ActionEvent event) throws IOException {
-        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Cliente);
+        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Cliente, "Busca de Clientes");
     }
 
     @FXML
     private void buscarFuncionarios(ActionEvent event) throws IOException {
-        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Funcionario);
+        buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass.Funcionario, "Busca de Funcionários");
     }
 
-    private void buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass pf) throws IOException {
-        FiltroController bc = getNewFiltroController();
+    private void buscaPessoasFisicas(BuscaPessoaFisicaController.PessoaFisicaClass pf, String screenName) throws IOException {
+        FiltroController fc = getNewFiltroController(screenName);
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaPessoaFisica.fxml"));
-        BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(bc, pf, market);
-        bc.setFilterComunication(bpfc);
+        BuscaPessoaFisicaController bpfc = new BuscaPessoaFisicaController(fc, pf, market, funcionario);
+        fc.setFilterComunication(bpfc);
 
         subLoader.setController(bpfc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void showClientesMaisConsumistas(ActionEvent event) throws IOException {
-        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MAIS_CONSUMISTAS);
+        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MAIS_CONSUMISTAS, "Clientes mais consumistas");
     }
 
     @FXML
     private void showMediaConsumoClientes(ActionEvent event) throws IOException {
-        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MEDIA_CONSUMO);
+        showRelatorioCliente(RelatorioClienteController.TipoRelatorio.MEDIA_CONSUMO, "Média de  Consumo/Cliente");
     }
 
-    private void showRelatorioCliente(RelatorioClienteController.TipoRelatorio tr) throws IOException {
-        FiltroController bc = getNewFiltroController();
+    private void showRelatorioCliente(RelatorioClienteController.TipoRelatorio tr, String screenName) throws IOException {
+        FiltroController fc = getNewFiltroController(screenName);
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioCliente.fxml"));
-        RelatorioClienteController rcc = new RelatorioClienteController(bc, tr, market);
-        bc.setFilterComunication(rcc);
+        RelatorioClienteController rcc = new RelatorioClienteController(fc, tr, market);
+        fc.setFilterComunication(rcc);
 
         subLoader.setController(rcc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void showProdMaisVend(ActionEvent event) throws IOException {
-        FiltroController bc = getNewFiltroController();
+        FiltroController fc = getNewFiltroController("Produto mais vendidos");
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioProduto.fxml"));
-        RelatorioProdutoController rpc = new RelatorioProdutoController(bc, market);
-        bc.setFilterComunication(rpc);
+        RelatorioProdutoController rpc = new RelatorioProdutoController(fc, market);
+        fc.setFilterComunication(rpc);
 
         subLoader.setController(rpc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
     private void showPagMaisUsado(ActionEvent event) throws IOException {
-        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO);
+        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO, "Meio Pag. mais usados");
     }
 
     @FXML
     private void showPagMaisRentavel(ActionEvent event) throws IOException {
-        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_RENTAVEL);
+        showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio.MAIS_RENTAVEL, "Meio Pag. mais rentáveis");
     }
 
-    private void showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio tr) throws IOException {
-        FiltroController bc = getNewFiltroController();
+    private void showRelatorioMeioPag(RelatorioMeioPagController.TipoRelatorio tr, String screeName) throws IOException {
+        FiltroController fc = getNewFiltroController(screeName);
 
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/RelatorioMeioPag.fxml"));
-        RelatorioMeioPagController rmpc = new RelatorioMeioPagController(bc, tr, market);
-        bc.setFilterComunication(rmpc);
+        RelatorioMeioPagController rmpc = new RelatorioMeioPagController(fc, tr, market);
+        fc.setFilterComunication(rmpc);
 
         subLoader.setController(rmpc);
         Parent subView = subLoader.load();
-        bc.setContent(subView);
+        fc.setContent(subView);
     }
 
     @FXML
@@ -242,5 +262,16 @@ public class FXMLController implements Initializable, MainScreenListener {
         Parent root = screenStack.get(screenStack.size() - 1);
         content.getChildren().add(root);
         screenStack.remove(root);
+        
+        TreeItem<String> lastCrumb = navBar.getSelectedCrumb();
+        navBar.setSelectedCrumb(lastCrumb.getParent());
+        
+        if (navBar.getSelectedCrumb() == null){
+            navBarConteiner.setVisible(false);
+            navBarConteiner.setManaged(false);
+        }else{
+            lastCrumb.getParent().getChildren().remove(lastCrumb);
+        }
+        
     }
 }
