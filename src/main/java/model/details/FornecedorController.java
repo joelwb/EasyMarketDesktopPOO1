@@ -5,10 +5,15 @@
  */
 package model.details;
 
+import database.usuarios.ContatoDAO;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -17,7 +22,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import modelo.supermercado.mercadoria.Fornecedor;
+import modelo.usuarios.Contato;
 import modelo.usuarios.Endereco;
+import util.TableViewConfigurator;
 import util.Util;
 
 /**
@@ -27,6 +34,7 @@ import util.Util;
  */
 public class FornecedorController implements Initializable {
     private final Fornecedor fornecedor;
+    private final List<Contato> contatos;
     
     @FXML
     private TextField nome;
@@ -47,10 +55,11 @@ public class FornecedorController implements Initializable {
     @FXML
     private TableView<List<String>> contatosTable;
 
-    public FornecedorController(Fornecedor fornecedor) throws IllegalArgumentException{
+    public FornecedorController(Fornecedor fornecedor) throws IllegalArgumentException, SQLException, ClassNotFoundException {
         Util.verificaIsObjNull(fornecedor, "Fornecedor");
         
         this.fornecedor = fornecedor;
+        contatos = ContatoDAO.readContatosByPessoa(fornecedor);        
     }
     
     /**
@@ -60,6 +69,7 @@ public class FornecedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         numero.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5000, 0));
         estado.getItems().addAll(Arrays.asList(Endereco.Estado.values()));
+        TableViewConfigurator.configure(contatosTable);
         inicializaCampos();
     }    
 
@@ -74,5 +84,13 @@ public class FornecedorController implements Initializable {
         bairro.setText(endereco.getBairro());
         cidade.setText(endereco.getCidade());
         estado.setValue(endereco.getEstado());
+        
+        for (Contato contato : contatos){
+            List<String> row = new ArrayList<>();
+            row.add(contato.getDescricao());
+            row.add(contato.getTipo().toString());
+            
+            contatosTable.getItems().add(row);
+        }
     }
 }

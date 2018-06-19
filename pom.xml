@@ -40,6 +40,16 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>ViaCEP</groupId>
+            <artifactId>ViaCEP</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>JSON</groupId>
+            <artifactId>JSON</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

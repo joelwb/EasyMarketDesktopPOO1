@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="pessoaFisicaTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" text="Nome" />
-          <TableColumn fx:id="cpfCol" editable="false" prefWidth="75.0" text="CPF" />
+          <TableColumn fx:id="nameCol" editable="false" prefWidth="75.0" sortable="false" text="Nome" />
+          <TableColumn fx:id="cpfCol" editable="false" prefWidth="75.0" sortable="false" text="CPF" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

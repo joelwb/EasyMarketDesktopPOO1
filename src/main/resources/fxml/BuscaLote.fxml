@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="loteTable" maxHeight="1.7976931348623157E308" maxWidth="980.0" prefHeight="720.0" prefWidth="640.0" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn editable="false" prefWidth="75.0" text="Identificador" />
-          <TableColumn editable="false" prefWidth="75.0" text="Cód. Prod." />
+          <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Identificador" />
+          <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Cód. Prod." />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

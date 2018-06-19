@@ -44,14 +44,13 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
     @FXML
     private void login(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
-        Funcionario funcionario = null;
-        Supermercado supermercado = null;
+        Funcionario funcionario;
+        Supermercado supermercado;
 
         try {
             funcionario = FuncionarioDAO.SignIn(email.getText(), senha.getText());

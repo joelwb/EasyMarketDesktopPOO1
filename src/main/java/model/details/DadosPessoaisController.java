@@ -7,11 +7,16 @@ package model.details;
  */
 import alerts.AddContatoAlertController;
 import alerts.MudarSenhaAlertController;
+import br.com.parg.viacep.ViaCEP;
+import br.com.parg.viacep.ViaCEPEvents;
+import br.com.parg.viacep.ViaCEPException;
+import database.usuarios.ContatoDAO;
 import database.usuarios.FuncionarioDAO;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -54,20 +60,21 @@ import static util.DateObjConversor.toLocalDate;
 import util.TableViewConfigurator;
 import util.Util;
 import main.MainScreenListener;
+import org.json.JSONException;
 
 /**
  * FXML Controller class
  *
  * @author joel-
  */
-//TODO testar com ano de nascimenot menor que 1970;
-public class DadosPessoaisController implements Initializable {
+public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
     private Supermercado supermercado;
     private Funcionario funcionario;
     private Cliente cliente;
     private MainScreenListener listener;
     private boolean isPerfil;
+    private List<Contato> contatos;
 
     @FXML
     private TextField email;
@@ -120,7 +127,7 @@ public class DadosPessoaisController implements Initializable {
     @FXML
     private ToolBar toolBar;
 
-    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainScreenListener listener, Supermercado supermercado) throws IllegalArgumentException {
+    public DadosPessoaisController(Funcionario funcAcessado, Funcionario funcLogado, MainScreenListener listener, Supermercado supermercado) throws IllegalArgumentException, SQLException, ClassNotFoundException {
         Util.verificaIsObjNull(funcLogado, "Funcionario logado");
         Util.verificaIsObjNull(supermercado, "Supermercado");
 
@@ -131,11 +138,15 @@ public class DadosPessoaisController implements Initializable {
             isPerfil = true;
         }
 
+        if (funcAcessado != null) {
+            contatos = ContatoDAO.readContatosByPessoa(funcAcessado);
+        }
     }
 
-    public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException {
+    public DadosPessoaisController(Cliente cliente) throws IllegalArgumentException, SQLException, ClassNotFoundException {
         Util.verificaIsObjNull(cliente, "Cliente");
         this.cliente = cliente;
+        contatos = ContatoDAO.readContatosByPessoa(cliente);
     }
 
     /**
@@ -160,7 +171,17 @@ public class DadosPessoaisController implements Initializable {
             senhaConteiner.setManaged(false);
             save.setText("Cadastrar");
         } else {
+
+            for (Contato contato : contatos) {
+                List<String> row = new ArrayList<>();
+                row.add(contato.getDescricao());
+                row.add(contato.getTipo().toString());
+
+                contatosTable.getItems().add(row);
+            }
+
             if (funcionario != null) {                  //é consulta ou perfil de fucionario
+
                 setor.setText(funcionario.getSetor());
                 cargo.setText(funcionario.getCargo());
 
@@ -213,19 +234,28 @@ public class DadosPessoaisController implements Initializable {
         String cidade = this.cidade.getText();
         Estado estado = this.estado.getValue();
 
+        if (cep.split("-").length != 2) {
+            cep = cep.substring(0, 5) + "-" + cep.substring(5);
+        }
+
         try {
             if (!isPerfil) {    //é cadastro de Funcionario
                 Endereco endereco = new Endereco(bairro, cep, cidade, estado, numero, rua);
                 Funcionario novoFuncionario = new Funcionario(cargo, setor, cpf, dataNasc, genero, email, senha, nome, endereco);
                 FuncionarioDAO.create(novoFuncionario, supermercado);
-            } else {             //é atualização dos dados
+            } else {            //é atualização dos dados
                 //TODO usar fucionarioDAO.update();
             }
         } catch (UnsupportedEncodingException | ClassNotFoundException | IllegalArgumentException | NoSuchAlgorithmException | SQLException ex) {
-            AlertCreator.exibeExececao(ex);
+            if (ex.getMessage().contains("duplicate key value")) { //Já existe uma pessoa fisica com esse login
+                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Email repetido!", "Já existem um cadastro com esse email", "Por favor, troque o email que será usado no login!");
+            } else {
+                AlertCreator.exibeExececao(ex);
+            }
             return;
         }
 
+        //TODO Atualizar os contatos
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
         listener.pullScreen();
     }
@@ -279,6 +309,31 @@ public class DadosPessoaisController implements Initializable {
     }
 
     @FXML
+    private void searchCep(ActionEvent event) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ViaCEP viaCEP = new ViaCEP(cep.getText(), DadosPessoaisController.this);
+                } catch (ViaCEPException | JSONException ex) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (ex instanceof ViaCEPException) {
+                                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Erro!", "Error ao buscar endereço!", "Não foi possível encontrar o CEP");
+                            } else {
+                                AlertCreator.exibeExececao(ex);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        t.start();
+    }
+
+    @FXML
     private void changeSenha(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Trocando de Senha!");
@@ -295,9 +350,7 @@ public class DadosPessoaisController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    //TODO usar na versão criptografada do BD
-                    //if (!Util.criptografar(msac.getSenhaAtual()).equals(funcionario.getSenha())) {
-                    if (!msac.getSenhaAtual().equals(funcionario.getSenha())) {
+                    if (!Util.criptografar(msac.getSenhaAtual()).equals(funcionario.getSenha())) {
                         Toolkit.getDefaultToolkit().beep();
                         msac.setVisibilityErroSenhaAtual(true);
                         event.consume();
@@ -315,9 +368,9 @@ public class DadosPessoaisController implements Initializable {
         if (result.get() == ButtonType.OK) {
             String senhaNova = msac.getSenhaNova();
             try {
+                senha.setText(Util.criptografar(senhaNova));
                 funcionario.setSenha(senhaNova);
-                senha.setText(senhaNova);
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalArgumentException | NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 AlertCreator.exibeExececao(ex);
             }
         }
@@ -393,5 +446,36 @@ public class DadosPessoaisController implements Initializable {
         });
 
         return alert;
+    }
+
+    @Override
+    public void onCEPSuccess(final ViaCEP viacep) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rua.setText(new String(viacep.getLogradouro().getBytes(), Charset.forName("UTF-8")));
+                bairro.setText(new String(viacep.getBairro().getBytes(), Charset.forName("UTF-8")));
+                cidade.setText(new String(viacep.getLocalidade().getBytes(), Charset.forName("UTF-8")));
+
+                for (Estado e : Estado.values()) {
+                    if (e.toString().equals(viacep.getUf())) {
+                        estado.setValue(e);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCEPError(String string) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                rua.setText("");
+                bairro.setText("");
+                cidade.setText("");
+                estado.setValue(null);
+            }
+        });
     }
 }

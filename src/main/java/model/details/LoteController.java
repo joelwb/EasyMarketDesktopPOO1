@@ -101,7 +101,7 @@ public class LoteController implements Initializable {
 
         if (listener == null) {         //é uma nova janela com exibição dos dados do lote
             inicializaCampos();
-            disableAllFields();
+            disableFields();
 
         } else if (lote == null) {       //é cadastro
             apagar.setVisible(false);
@@ -116,8 +116,6 @@ public class LoteController implements Initializable {
 
     @FXML
     private void save(ActionEvent event) {
-        //TODO Verificar se vai ser possivel ou não atualizar dados do lote
-
         String identificador = this.identificador.getText();
         Date dataCompra = DateObjConversor.toDate(this.dataCompra.getValue());
         Date dataFabric = DateObjConversor.toDate(this.dataFabric.getValue());
@@ -129,32 +127,48 @@ public class LoteController implements Initializable {
             return;
         }
 
-        int idLote;
-        try {
-            Lote novoLote = new Lote(dataCompra, dataFabric, dataVal, qtdUnidade, identificador, produto);
+        if (lote == null) { //é cadastro de lote
+            int idLote;
+            try {
+                Lote novoLote = new Lote(dataCompra, dataFabric, dataVal, qtdUnidade, identificador, produto);
 
-            if (dataCompra.getTime() < dataFabric.getTime()) {
-                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Aviso!", "Conflito entre data de compra e data de fabricação!", "Data de compra não pode ser antes da data de fabricação!");
+                if (dataCompra.getTime() < dataFabric.getTime()) {
+                    AlertCreator.criarAlert(Alert.AlertType.WARNING, "Aviso!", "Conflito entre data de compra e data de fabricação!", "Data de compra não pode ser antes da data de fabricação!");
+                    return;
+                }
+
+                if (dataVal != null && dataVal.getTime() <= dataFabric.getTime()) {
+                    AlertCreator.criarAlert(Alert.AlertType.WARNING, "Aviso!", "Conflito entre data de validade e data de fabricação!", "Data de dataVal não pode ser antes ou no mesmo dia da data de fabricação!");
+                    return;
+                }
+
+                idLote = LoteDAO.create(novoLote, fornecedor, produto, supermercado);
+            } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
+                if (ex.getMessage().contains("duplicate key value")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
+                    AlertCreator.criarAlert(Alert.AlertType.WARNING, "Lote repetido!", "Já existem um lote com mesmo identificador sobre o mesmo produto", null);
+                } else {
+                    AlertCreator.exibeExececao(ex);
+                }
                 return;
             }
 
-            if (dataVal.getTime() <= dataFabric.getTime()) {
-                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Aviso!", "Conflito entre data de validade e data de fabricação!", "Data de dataVal não pode ser antes ou no mesmo dia da data de fabricação!");
-                return;
+            try {
+                SupermercadoDAO.addFornecedor(fornecedor, supermercado);
+            } catch (ClassNotFoundException | SQLException ex) {
+                if (!ex.getMessage().contains("duplicate key value")) {
+                    apagar(idLote);
+                    AlertCreator.exibeExececao(ex);
+                    return;
+                }
             }
-
-            idLote = LoteDAO.create(novoLote, fornecedor, produto, supermercado);
-        } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
-            AlertCreator.exibeExececao(ex);
-            return;
-        }
-
-        try {
-            SupermercadoDAO.addFornecedor(fornecedor, supermercado);
-        } catch (ClassNotFoundException | SQLException ex) {
-            apagar(idLote);
-            AlertCreator.exibeExececao(ex);
-            return;
+        }else { //é update de lote
+            lote.setDataCompra(dataCompra);
+            lote.setDataFabricacao(dataFabric);
+            lote.setDataValidade(dataVal);
+            lote.setIdentificador(identificador);
+            lote.setNumUnidades(qtdUnidade);
+            
+            //TODO usar função update
         }
 
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
@@ -185,21 +199,21 @@ public class LoteController implements Initializable {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
         BuscaProdutoController bpc = new BuscaProdutoController(fc, supermercado, this);
         fc.setFilterComunication(bpc);
 
         subLoader.setController(bpc);
         Parent subView = null;
-        
+
         try {
             subView = subLoader.load();
         } catch (IOException ex) {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         fc.setContent(subView);
     }
 
@@ -212,21 +226,21 @@ public class LoteController implements Initializable {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
         BuscaFornecedorController bfc = new BuscaFornecedorController(fc, this);
         fc.setFilterComunication(bfc);
 
         subLoader.setController(bfc);
         Parent subView = null;
-        
+
         try {
             subView = subLoader.load();
         } catch (IOException ex) {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         fc.setContent(subView);
     }
 
@@ -240,12 +254,7 @@ public class LoteController implements Initializable {
         nomeFornecedor.setText(fornecedor.getNome());
     }
 
-    private void disableAllFields() {
-        identificador.setDisable(true);
-        dataCompra.setDisable(true);
-        dataFabric.setDisable(true);
-        dataVal.setDisable(true);
-
+    private void disableFields() {
         searchProduto.setVisible(false);
         searchProduto.setManaged(false);
 
@@ -254,10 +263,6 @@ public class LoteController implements Initializable {
 
         cancel.setVisible(false);
         cancel.setManaged(false);
-
-        //TODO tornar visivel caso possa atualizar os dados
-        save.setVisible(false);
-        save.setManaged(false);
     }
 
     public void setFornecedor(Fornecedor fornecedor) {

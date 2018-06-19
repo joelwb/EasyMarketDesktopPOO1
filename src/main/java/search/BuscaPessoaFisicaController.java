@@ -103,7 +103,6 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
 
     @FXML
     private void getDetalhes(ActionEvent event) {
-        //TODO testar com cliente
         int indxPF = pessoaFisicaTable.getSelectionModel().getSelectedIndex();
         if (indxPF == -1) {
             return;
@@ -114,24 +113,24 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
         DadosPessoaisController dpc;
 
-        if (pfc == PessoaFisicaClass.Cliente) {
-            dpc = new DadosPessoaisController((Cliente) pf);
-        } else {
-            dpc = new DadosPessoaisController((Funcionario) pf, funcionario, null, supermercado);
-        }
-
-        loader.setController(dpc);
-
         try {
+            if (pfc == PessoaFisicaClass.Cliente) {
+                dpc = new DadosPessoaisController((Cliente) pf);
+            } else {
+                dpc = new DadosPessoaisController((Funcionario) pf, funcionario, null, supermercado);
+            }
+
+            loader.setController(dpc);
+
             Screen.openNew(loader);
-        } catch (IOException ex) {
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);
         }
     }
 
     @FXML
     private void getAllOrders(ActionEvent event) {
-        //TODO tela com compras do cliente
+        //TODO fazer e usar tela com compras do cliente e a tela com itens de uma das compras
     }
 
     @Override
@@ -140,7 +139,6 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
         String cpf = (String) response.get("CPF");
         Genero genero = (Genero) response.get("Gênero");
 
-        //TODO Testar com clientes
         try {
             if (pfc == PessoaFisicaClass.Cliente) {
                 pfs = new ArrayList<PessoaFisica>(ClienteDAO.readClientesBySupermercado(supermercado, nome, cpf, genero));

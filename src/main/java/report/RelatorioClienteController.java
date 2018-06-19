@@ -85,7 +85,7 @@ public class RelatorioClienteController implements Initializable, FilterComunica
 
     @FXML
     private void getAllOrders(ActionEvent event) {
-        //TODO tela com compras do cliente
+        //TODO fazer e usar tela com compras do cliente e a tela com itens de uma das compras
     }
     
     @Override

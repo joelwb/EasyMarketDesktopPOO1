@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="prodTable" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <columns>
-          <TableColumn editable="false" prefWidth="75.0" text="Nome" />
-          <TableColumn editable="false" prefWidth="75.0" text="Código" />
+          <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Nome" />
+          <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Código" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

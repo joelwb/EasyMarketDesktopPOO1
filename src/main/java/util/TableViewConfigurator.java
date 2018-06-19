@@ -17,9 +17,10 @@ import javafx.util.Callback;
  * @author joel-
  */
 public abstract class TableViewConfigurator {
-    public static void configure(TableView<List<String>> table){
-        for (int i = 0; i < table.getColumns().size(); i++){
-            TableColumn<List<String>,String> col = (TableColumn<List<String>,String>) table.getColumns().get(i);
+
+    public static void configure(TableView<List<String>> table) {
+        for (int i = 0; i < table.getColumns().size(); i++) {
+            TableColumn<List<String>, String> col = (TableColumn<List<String>, String>) table.getColumns().get(i);
             final int j = i;
             
             col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<List<String>, String>, ObservableValue<String>>() {

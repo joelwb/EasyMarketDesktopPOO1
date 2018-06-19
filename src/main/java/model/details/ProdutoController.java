@@ -87,11 +87,6 @@ public class ProdutoController implements Initializable {
             cancel.setVisible(false);
             cancel.setManaged(false);
 
-            codigo.setDisable(true);
-            marca.setDisable(true);
-            nome.setDisable(true);
-            tipo.setDisable(true);
-
             inicializaCampos();
 
             save.setText("Salvar");
@@ -127,7 +122,7 @@ public class ProdutoController implements Initializable {
         double custo = this.custo.getValue();
         double preco = this.preco.getValue();
 
-        if (prod == null) { //é cadastro
+        if (prod == null) {     //é cadastro
             try {
                 Produto novoProd = new Produto(codigo, custo, descricao, marca, nome, preco, qtdPrateleira, qtdEstoque, tipo);
                 ProdutoDAO.create(novoProd, supermercado);
@@ -135,14 +130,18 @@ public class ProdutoController implements Initializable {
                 AlertCreator.exibeExececao(ex);
                 return;
             }
-        } else {             //é atualização de dados
+        } else {                //é atualização de dados
+            prod.setNome(nome);
+            prod.setCodigo(codigo);
+            prod.setMarca(marca);
+            prod.setTipo(tipo);
             prod.setCusto(custo);
             prod.setDescricao(descricao);
             prod.setPrecoVenda(preco);
             prod.setQtdEstoque(qtdEstoque);
             prod.setQtdPrateleira(qtdPrateleira);
 
-            //TODO usar função para atualizar
+            //TODO usar função para atualizar o produto
         }
 
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);

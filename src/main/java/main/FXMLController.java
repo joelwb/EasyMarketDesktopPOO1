@@ -23,14 +23,18 @@ import report.RelatorioClienteController;
 import report.RelatorioMeioPagController;
 import report.RelatorioProdutoController;
 import filter.FiltroController;
+import java.sql.SQLException;
+import javafx.animation.FadeTransition;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
+import javafx.util.Duration;
 import org.controlsfx.control.BreadCrumbBar;
 import search.BuscaFornecedorController;
 import search.BuscaLoteController;
 import search.BuscaPessoaFisicaController;
 import search.BuscaProdutoController;
 
+//TODO organizar os fxmls e trocar os paths deles na classe
 public class FXMLController implements Initializable, MainScreenListener {
 
     private List<Parent> screenStack;
@@ -52,7 +56,7 @@ public class FXMLController implements Initializable, MainScreenListener {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         screenStack = new ArrayList<>();
-        
+
         navBarConteiner.setVisible(false);
         navBarConteiner.setManaged(false);
     }
@@ -63,31 +67,59 @@ public class FXMLController implements Initializable, MainScreenListener {
         screenStack.add((Parent) content.getChildren().get(0));
         content.getChildren().clear();
         HBox.setHgrow(root, Priority.ALWAYS);
+        addFade(root);
         content.getChildren().add(root);
-        
+
         TreeItem<String> screenCrumb = new TreeItem<>(screenName);
-        
-        if (navBar.getSelectedCrumb() != null){
+
+        if (navBar.getSelectedCrumb() != null) {
             navBar.getSelectedCrumb().getChildren().add(screenCrumb);
         }
-        
+
         navBarConteiner.setVisible(true);
         navBarConteiner.setManaged(true);
-        
+
         navBar.setSelectedCrumb(screenCrumb);
     }
 
+    @Override
+    public void pullScreen() {
+        content.getChildren().clear();
+        Parent root = screenStack.get(screenStack.size() - 1);
+        addFade(root);
+        content.getChildren().add(root);
+        screenStack.remove(root);
+
+        TreeItem<String> lastCrumb = navBar.getSelectedCrumb();
+        navBar.setSelectedCrumb(lastCrumb.getParent());
+
+        if (navBar.getSelectedCrumb() == null) {
+            navBarConteiner.setVisible(false);
+            navBarConteiner.setManaged(false);
+        } else {
+            lastCrumb.getParent().getChildren().remove(lastCrumb);
+        }
+
+    }
+
+    private void addFade(Parent root) {
+        FadeTransition ft = new FadeTransition(Duration.seconds(1), root);
+        ft.setFromValue(0);
+        ft.setToValue(1);
+        ft.play();
+    }
+
     @FXML
-    private void openDadosPessoais(ActionEvent event) throws IOException {
+    private void openDadosPessoais(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
 
         DadosPessoaisController controller = new DadosPessoaisController(funcionario, funcionario, this, market);
         loader.setController(controller);
-        addScreen(loader,"Dados Pessoais");
+        addScreen(loader, "Dados Pessoais");
     }
 
     @FXML
-    private void cadastrarFuncionario(ActionEvent event) throws IOException {
+    private void cadastrarFuncionario(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
 
         DadosPessoaisController controller = new DadosPessoaisController(null, funcionario, this, market);
@@ -98,7 +130,7 @@ public class FXMLController implements Initializable, MainScreenListener {
     @FXML
     private void cadastrarProduto(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
-        ProdutoController pc = new ProdutoController(null, this,market);
+        ProdutoController pc = new ProdutoController(null, this, market);
         loader.setController(pc);
 
         addScreen(loader, "Cadastro de Produto");
@@ -256,22 +288,4 @@ public class FXMLController implements Initializable, MainScreenListener {
         thisStage.close();
     }
 
-    @Override
-    public void pullScreen() {
-        content.getChildren().clear();
-        Parent root = screenStack.get(screenStack.size() - 1);
-        content.getChildren().add(root);
-        screenStack.remove(root);
-        
-        TreeItem<String> lastCrumb = navBar.getSelectedCrumb();
-        navBar.setSelectedCrumb(lastCrumb.getParent());
-        
-        if (navBar.getSelectedCrumb() == null){
-            navBarConteiner.setVisible(false);
-            navBarConteiner.setManaged(false);
-        }else{
-            lastCrumb.getParent().getChildren().remove(lastCrumb);
-        }
-        
-    }
 }

@@ -87,10 +87,12 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     @FXML
     private void getDetalhesLote(ActionEvent event) {
         int indxLote = loteTable.getSelectionModel().getSelectedIndex();
-        if (indxLote == -1) return;
-        
+        if (indxLote == -1) {
+            return;
+        }
+
         Lote lote = lotes.get(indxLote);
-        
+
         Fornecedor fornecedor;
         try {
             fornecedor = FornecedorDAO.readFornecedorByLote(lote);
@@ -98,11 +100,11 @@ public class BuscaLoteController implements Initializable, FilterComunication {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lote.fxml"));
         LoteController lc = new LoteController(lote, fornecedor);
         loader.setController(lc);
-        
+
         try {
             Screen.openNew(loader);
         } catch (IOException ex) {
@@ -113,14 +115,16 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     @FXML
     private void getDetalhesProd(ActionEvent event) {
         int indxLote = loteTable.getSelectionModel().getSelectedIndex();
-        if (indxLote == -1) return;
-        
+        if (indxLote == -1) {
+            return;
+        }
+
         Produto prodSelected = lotes.get(indxLote).getProduto();
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
         ProdutoController pc = new ProdutoController(prodSelected);
         loader.setController(pc);
-        
+
         try {
             Screen.openNew(loader);
         } catch (IOException ex) {
@@ -132,9 +136,9 @@ public class BuscaLoteController implements Initializable, FilterComunication {
     private void getDetalhesForn(ActionEvent event) {
         int indxLote = loteTable.getSelectionModel().getSelectedIndex();
         if (indxLote == -1) return;
-        
+
         Lote lote = lotes.get(indxLote);
-        
+
         Fornecedor fornecedor;
         try {
             fornecedor = FornecedorDAO.readFornecedorByLote(lote);
@@ -142,14 +146,13 @@ public class BuscaLoteController implements Initializable, FilterComunication {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
-        FornecedorController fc = new FornecedorController(fornecedor);
-        loader.setController(fc);
-        
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+            FornecedorController fc = new FornecedorController(fornecedor);
+            loader.setController(fc);
+
             Screen.openNew(loader);
-        } catch (IOException ex) {
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);
         }
     }
@@ -163,7 +166,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
         Date dataValMax = toDate((LocalDate) response.get("Data Validade Máx"));
         Date dataCompraMin = toDate((LocalDate) response.get("Data Compra Min"));
         Date dataCompraMax = toDate((LocalDate) response.get("Data Compra Máx"));
-        
+
         try {
             lotes = LoteDAO.readLotesBySupermercado(supermercado, identif, dataFabMin, dataFabMax, dataValMin, dataValMax, dataCompraMin, dataCompraMax);
             refreshTable();
@@ -174,7 +177,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
 
     private void refreshTable() {
         loteTable.getItems().clear();
-            
+
         for (Lote lote : lotes) {
             List<String> row = new ArrayList<>();
             row.add(lote.getIdentificador());

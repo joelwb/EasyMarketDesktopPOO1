@@ -92,43 +92,43 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
 
     @FXML
     private void getDetalhes(ActionEvent event) {
-        //TODO testar
         int indxForn = fornTable.getSelectionModel().getSelectedIndex();
         if (indxForn == -1) return;
-        
+
         Fornecedor fornecedor = fornecedores.get(indxForn);
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
-        FornecedorController fc = new FornecedorController(fornecedor);
-        loader.setController(fc);
-        
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+            FornecedorController fc = new FornecedorController(fornecedor);
+            loader.setController(fc);
+
             Screen.openNew(loader);
-        } catch (IOException ex) {
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);
         }
     }
 
     @FXML
     private void getAllLotes(ActionEvent event) {
-        //TODO testar
         int indxForn = fornTable.getSelectionModel().getSelectedIndex();
-        if (indxForn == -1) return;
-        
+        if (indxForn == -1) {
+            return;
+        }
+
         Fornecedor fornecedor = fornecedores.get(indxForn);
-        
+
         List<Lote> lotes;
         try {
-            lotes = LoteDAO.readLotesByFornecedor(fornecedor);
+            lotes = LoteDAO.readLotesByFornecedor(fornecedor, supermercado);
         } catch (SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);
             return;
         }
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
         BuscaLoteController blc = new BuscaLoteController(lotes);
         loader.setController(blc);
-        
+
         try {
             Screen.openNew(loader);
         } catch (IOException ex) {
@@ -138,10 +138,11 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
 
     @FXML
     private void selectForn(ActionEvent event) {
-        //TODO Testar
         int indxForn = fornTable.getSelectionModel().getSelectedIndex();
-        if (indxForn == -1) return;
-        
+        if (indxForn == -1) {
+            return;
+        }
+
         lc.setFornecedor(fornecedores.get(indxForn));
         ((Stage) selectButton.getScene().getWindow()).close();
     }
@@ -150,15 +151,14 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
     public void listenResponse(Map<String, Object> response) {
         String nome = (String) response.get("Nome");
         String cnpj = (String) response.get("CNPJ");
-        
-        //TODO testar com os dados novos
+
         try {
             if (lc != null) { //é seleção de um fornecedor pra um lote
                 fornecedores = FornecedorDAO.readAllFornecedores(nome, cnpj);
             } else {
                 fornecedores = FornecedorDAO.readFornecedoresBySupermercado(supermercado, nome, cnpj);
             }
-            
+
             refreshTable();
         } catch (IllegalArgumentException | SQLException | ClassNotFoundException ex) {
             AlertCreator.exibeExececao(ex);

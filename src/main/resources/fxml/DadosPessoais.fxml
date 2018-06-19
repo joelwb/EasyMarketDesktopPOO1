@@ -167,7 +167,7 @@
                               <HBox>
                                  <children>
                                     <TextField fx:id="cep" minWidth="200.0" />
-                                    <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Button">
+                                    <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#searchCep" text="Button">
                                        <graphic>
                                           <MaterialDesignIconView glyphName="MAGNIFY" size="16" />
                                        </graphic>
@@ -245,8 +245,8 @@
                         </FlowPane>
                         <TableView fx:id="contatosTable" maxHeight="1.7976931348623157E308" maxWidth="500.0" minHeight="200.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn editable="false" prefWidth="135.0" text="Contato" />
-                            <TableColumn editable="false" minWidth="0.0" prefWidth="239.0" text="Tipo" />
+                            <TableColumn editable="false" prefWidth="135.0" sortable="false" text="Contato" />
+                            <TableColumn editable="false" minWidth="0.0" prefWidth="239.0" sortable="false" text="Tipo" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

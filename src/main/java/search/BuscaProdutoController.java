@@ -144,7 +144,7 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void getLotesNestVencim(ActionEvent event) {
-        //TODO Chamar BuscaLotesController para exibir os lotes
+        //TODO Chamar BuscaLotesController para exibir os lotes do produto proximo do vencimento
     }
 
     @FXML
