@@ -161,18 +161,31 @@ public class LoteController implements Initializable {
                     return;
                 }
             }
-        }else { //é update de lote
+        } else { //é update de lote
             lote.setDataCompra(dataCompra);
             lote.setDataFabricacao(dataFabric);
             lote.setDataValidade(dataVal);
             lote.setIdentificador(identificador);
             lote.setNumUnidades(qtdUnidade);
-            
-            //TODO usar função update
+
+            try {
+                LoteDAO.update(lote);
+            } catch (IllegalArgumentException | SQLException | ClassNotFoundException ex) {
+                if (ex.getMessage().contains("duplicate key value")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
+                    AlertCreator.criarAlert(Alert.AlertType.WARNING, "Lote repetido!", "Já existem um lote com mesmo identificador sobre o mesmo produto", null);
+                } else {
+                    AlertCreator.exibeExececao(ex);
+                }
+                return;
+            }
         }
 
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
-        listener.pullScreen();
+        if (listener == null) { //é uma tela avulsa
+            ((Stage) this.identificador.getScene().getWindow()).close();
+        } else {                //é uma tela dentro da tela com os menus
+            listener.pullScreen();
+        }
     }
 
     @FXML
@@ -248,7 +261,9 @@ public class LoteController implements Initializable {
         identificador.setText(lote.getIdentificador());
         dataCompra.setValue(DateObjConversor.toLocalDate(lote.getDataCompra()));
         dataFabric.setValue(DateObjConversor.toLocalDate(lote.getDataFabricacao()));
-        dataVal.setValue(DateObjConversor.toLocalDate(lote.getDataValidade()));
+        if (lote.getDataValidade() != null) {
+            dataVal.setValue(DateObjConversor.toLocalDate(lote.getDataValidade()));
+        }
         codigoProd.setText(lote.getProduto().getCodigo());
         qtdUnidades.getValueFactory().setValue(lote.getNumUnidades());
         nomeFornecedor.setText(fornecedor.getNome());

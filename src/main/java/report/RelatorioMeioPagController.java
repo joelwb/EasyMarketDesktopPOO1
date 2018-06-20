@@ -31,6 +31,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -92,9 +93,9 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (tipo == RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO) {
-            infoCol.setText("Nº Usos");
+            infoCol.setText("Nº Compras");
         } else {
-            infoCol.setText("Ganhos");
+            infoCol.setText("Renda (R$)");
         }
 
         TableViewConfigurator.configure(tableRelatorio);
@@ -121,35 +122,19 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
 
     @FXML
     public void openGrafico(ActionEvent event) {
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        BarChart<String,Number> barChar = new BarChart<>(new CategoryAxis(),new NumberAxis());
+        LineChart<String, Number> lineChart = new LineChart<>(new CategoryAxis(), new NumberAxis());
 
-        XYChart.Series credito = new XYChart.Series();
-        credito.setName("Crédito");
-
-        XYChart.Series debito = new XYChart.Series();
-        debito.setName("Débito");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-        for (Date dataCompra : map.keySet()) {
-            if (!map.get(dataCompra).keySet().contains("Crédito")) {
-                credito.getData().add(new XYChart.Data(sdf.format(dataCompra), 0));
-            } else {
-                credito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Crédito")));
-            }
-
-            if (!map.get(dataCompra).keySet().contains("Débito")) {
-                debito.getData().add(new XYChart.Data(sdf.format(dataCompra), 0));
-            } else {
-                debito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Débito")));
-            }
-        }
-
-        chart.getData().addAll(credito, debito);
-
-        Scene scene = new Scene(chart);
+        lineChart.getData().addAll(getCreditoData(), getDebitoData());
+        barChar.getData().addAll(getCreditoData(),getDebitoData());
+        
+        lineChart.setMinWidth(0);
+        barChar.setMinWidth(0);
+        
+        SplitPane sp = new SplitPane();
+        sp.getItems().addAll(barChar,lineChart);
+        
+        Scene scene = new Scene(sp);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setHeight(720);
@@ -168,7 +153,40 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
             row.add(String.valueOf(map.get(dataCompra).get("Débito")));
             tableRelatorio.getItems().add(row);
         }
+    }
+    
+    private XYChart.Series<String,Number> getCreditoData(){
+        XYChart.Series<String,Number> credito = new XYChart.Series();
+        credito.setName("Crédito");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+        for (Date dataCompra : map.keySet()) {
+            if (!map.get(dataCompra).keySet().contains("Crédito")) {
+                credito.getData().add(new XYChart.Data(sdf.format(dataCompra), 0));
+            } else {
+                credito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Crédito")));
+            }
+        }
+        
+        return credito;
+    }
+    
+    private XYChart.Series<String,Number> getDebitoData(){
+        XYChart.Series<String,Number> debito = new XYChart.Series();
+        debito.setName("Débito");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (Date dataCompra : map.keySet()) {
+            if (!map.get(dataCompra).keySet().contains("Débito")) {
+                debito.getData().add(new XYChart.Data(sdf.format(dataCompra), 0));
+            } else {
+                debito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Débito")));
+            }
+        }
+        
+        return debito;
     }
 
     private void configureSubCol() {

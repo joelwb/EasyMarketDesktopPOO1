@@ -75,6 +75,7 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
     private MainScreenListener listener;
     private boolean isPerfil;
     private List<Contato> contatos;
+    private String novaSenha;
 
     @FXML
     private TextField email;
@@ -190,6 +191,7 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
                 if (!isPerfil) {
                     desabilitaEdicaoDados();            //é Consulta de funcionario
                 } else {
+                    email.setDisable(false);
                     setor.setDisable(true);
                     cargo.setDisable(true);
                 }
@@ -239,19 +241,25 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
         }
 
         try {
+            Endereco endereco = new Endereco(bairro, cep, cidade, estado, numero, rua);
+
             if (!isPerfil) {    //é cadastro de Funcionario
-                Endereco endereco = new Endereco(bairro, cep, cidade, estado, numero, rua);
                 Funcionario novoFuncionario = new Funcionario(cargo, setor, cpf, dataNasc, genero, email, senha, nome, endereco);
                 FuncionarioDAO.create(novoFuncionario, supermercado);
             } else {            //é atualização dos dados
-                //TODO usar fucionarioDAO.update();
+                funcionario.setCargo(cargo);
+                funcionario.setSetor(setor);
+                funcionario.setEndereco(endereco);
+                funcionario.setNome(nome);
+                funcionario.setGenero(genero);
+                funcionario.setDataNasc(dataNasc);
+                funcionario.setCpf(cpf);
+                funcionario.setSenha(this.senha.getText());
+
+                FuncionarioDAO.update(funcionario);
             }
         } catch (UnsupportedEncodingException | ClassNotFoundException | IllegalArgumentException | NoSuchAlgorithmException | SQLException ex) {
-            if (ex.getMessage().contains("duplicate key value")) { //Já existe uma pessoa fisica com esse login
-                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Email repetido!", "Já existem um cadastro com esse email", "Por favor, troque o email que será usado no login!");
-            } else {
-                AlertCreator.exibeExececao(ex);
-            }
+            AlertCreator.exibeExececao(ex);
             return;
         }
 
@@ -366,10 +374,9 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            String senhaNova = msac.getSenhaNova();
+            String novaSenha = msac.getSenhaNova();
             try {
-                senha.setText(Util.criptografar(senhaNova));
-                funcionario.setSenha(senhaNova);
+                senha.setText(Util.criptografar(novaSenha));
             } catch (IllegalArgumentException | NoSuchAlgorithmException | UnsupportedEncodingException ex) {
                 AlertCreator.exibeExececao(ex);
             }

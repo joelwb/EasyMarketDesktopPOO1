@@ -9,6 +9,7 @@ import database.supermercado.mercadoria.ProdutoDAO;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -122,26 +123,29 @@ public class ProdutoController implements Initializable {
         double custo = this.custo.getValue();
         double preco = this.preco.getValue();
 
-        if (prod == null) {     //é cadastro
-            try {
+        try {
+            if (prod == null) {     //é cadastro
+
                 Produto novoProd = new Produto(codigo, custo, descricao, marca, nome, preco, qtdPrateleira, qtdEstoque, tipo);
                 ProdutoDAO.create(novoProd, supermercado);
-            } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
-                AlertCreator.exibeExececao(ex);
-                return;
-            }
-        } else {                //é atualização de dados
-            prod.setNome(nome);
-            prod.setCodigo(codigo);
-            prod.setMarca(marca);
-            prod.setTipo(tipo);
-            prod.setCusto(custo);
-            prod.setDescricao(descricao);
-            prod.setPrecoVenda(preco);
-            prod.setQtdEstoque(qtdEstoque);
-            prod.setQtdPrateleira(qtdPrateleira);
 
-            //TODO usar função para atualizar o produto
+            } else {                //é atualização de dados
+                prod.setNome(nome);
+                prod.setCodigo(codigo);
+                prod.setMarca(marca);
+                prod.setTipo(tipo);
+                prod.setCusto(custo);
+                prod.setDescricao(descricao);
+                prod.setPrecoVenda(preco);
+                prod.setQtdEstoque(qtdEstoque);
+                prod.setQtdPrateleira(qtdPrateleira);
+
+                ProdutoDAO.update(prod);
+
+            }
+        } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
         }
 
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
