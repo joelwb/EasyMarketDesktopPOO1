@@ -61,6 +61,7 @@ import util.TableViewConfigurator;
 import util.Util;
 import main.MainScreenListener;
 import org.json.JSONException;
+import org.postgresql.util.PSQLException;
 
 /**
  * FXML Controller class
@@ -258,11 +259,17 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
                 FuncionarioDAO.update(funcionario);
             }
-        } catch (UnsupportedEncodingException | ClassNotFoundException | IllegalArgumentException | NoSuchAlgorithmException | SQLException ex) {
+        } catch (UnsupportedEncodingException | ClassNotFoundException | IllegalArgumentException | NoSuchAlgorithmException ex) {
             AlertCreator.exibeExececao(ex);
             return;
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equals("23505")) {
+                AlertCreator.criarAlert(Alert.AlertType.WARNING, "Email repetido", "Já existem uma conta com mesmo email", null);
+            } else {
+                AlertCreator.exibeExececao(ex);
+            }
+            return;
         }
-
         //TODO Atualizar os contatos
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
         listener.pullScreen();

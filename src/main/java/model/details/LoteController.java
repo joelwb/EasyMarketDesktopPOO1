@@ -143,8 +143,11 @@ public class LoteController implements Initializable {
                 }
 
                 idLote = LoteDAO.create(novoLote, fornecedor, produto, supermercado);
-            } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
-                if (ex.getMessage().contains("duplicate key value")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
+            } catch (IllegalArgumentException | ClassNotFoundException ex) {
+                AlertCreator.exibeExececao(ex);
+                return;
+            } catch (SQLException ex) {
+                if (ex.getSQLState().equals("23505")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
                     AlertCreator.criarAlert(Alert.AlertType.WARNING, "Lote repetido!", "Já existem um lote com mesmo identificador sobre o mesmo produto", null);
                 } else {
                     AlertCreator.exibeExececao(ex);
@@ -154,8 +157,11 @@ public class LoteController implements Initializable {
 
             try {
                 SupermercadoDAO.addFornecedor(fornecedor, supermercado);
-            } catch (ClassNotFoundException | SQLException ex) {
-                if (!ex.getMessage().contains("duplicate key value")) {
+            } catch (ClassNotFoundException ex) {
+                AlertCreator.exibeExececao(ex);
+                return;
+            } catch (SQLException ex) {
+                if (!ex.getSQLState().equals("23505")) {
                     apagar(idLote);
                     AlertCreator.exibeExececao(ex);
                     return;
@@ -170,8 +176,11 @@ public class LoteController implements Initializable {
 
             try {
                 LoteDAO.update(lote);
-            } catch (IllegalArgumentException | SQLException | ClassNotFoundException ex) {
-                if (ex.getMessage().contains("duplicate key value")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
+            } catch (IllegalArgumentException | ClassNotFoundException ex) {
+                AlertCreator.exibeExececao(ex);
+                return;
+            } catch (SQLException ex) {
+                if (ex.getSQLState().equals("23505")) { //Já existem um lote com mesmo identificador sobre o mesmo produto
                     AlertCreator.criarAlert(Alert.AlertType.WARNING, "Lote repetido!", "Já existem um lote com mesmo identificador sobre o mesmo produto", null);
                 } else {
                     AlertCreator.exibeExececao(ex);
