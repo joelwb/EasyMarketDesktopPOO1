@@ -101,7 +101,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Lote.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/Lote.fxml"));
         LoteController lc = new LoteController(lote, fornecedor);
         loader.setController(lc);
 
@@ -121,7 +121,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
 
         Produto prodSelected = lotes.get(indxLote).getProduto();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/Produto.fxml"));
         ProdutoController pc = new ProdutoController(prodSelected);
         loader.setController(pc);
 
@@ -147,7 +147,7 @@ public class BuscaLoteController implements Initializable, FilterComunication {
             return;
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/Fornecedor.fxml"));
             FornecedorController fc = new FornecedorController(fornecedor);
             loader.setController(fc);
 

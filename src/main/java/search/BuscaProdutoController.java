@@ -104,7 +104,7 @@ public class BuscaProdutoController implements Initializable, FilterComunication
         
         Produto prodSelected = produtos.get(indxProd);
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Produto.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/Produto.fxml"));
         ProdutoController pc = new ProdutoController(prodSelected);
         loader.setController(pc);
         
@@ -131,7 +131,7 @@ public class BuscaProdutoController implements Initializable, FilterComunication
             return;
         }
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/search/BuscaLote.fxml"));
         BuscaLoteController blc = new BuscaLoteController(lotes);
         loader.setController(blc);
         
@@ -144,7 +144,35 @@ public class BuscaProdutoController implements Initializable, FilterComunication
 
     @FXML
     private void getLotesNestVencim(ActionEvent event) {
-        //TODO Chamar BuscaLotesController para exibir os lotes do produto proximo do vencimento
+        Integer diasParaVencer = AlertCreator.getInt("Informe um valor", 
+                "Insira a quantidade de dias para um lote vencer (a partir de hoje):",null);
+        
+        if (diasParaVencer == null){
+            return;
+        }
+        
+        int indxProd = prodTable.getSelectionModel().getSelectedIndex();
+        if (indxProd == -1) return;
+        
+        Produto prodSelected = produtos.get(indxProd);
+        
+        List<Lote> lotes;
+        try {
+            lotes = LoteDAO.readLotesProxVal(prodSelected, diasParaVencer);
+        } catch (IllegalArgumentException | SQLException | ClassNotFoundException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/search/BuscaLote.fxml"));
+        BuscaLoteController blc = new BuscaLoteController(lotes);
+        loader.setController(blc);
+
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @FXML

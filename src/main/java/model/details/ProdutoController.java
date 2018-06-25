@@ -141,7 +141,6 @@ public class ProdutoController implements Initializable {
                 prod.setQtdPrateleira(qtdPrateleira);
 
                 ProdutoDAO.update(prod);
-
             }
         } catch (IllegalArgumentException | ClassNotFoundException | SQLException ex) {
             AlertCreator.exibeExececao(ex);

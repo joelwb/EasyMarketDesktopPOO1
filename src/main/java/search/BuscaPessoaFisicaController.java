@@ -5,6 +5,7 @@
  */
 package search;
 
+import database.supermercado.CompraDAO;
 import database.usuarios.ClienteDAO;
 import database.usuarios.FuncionarioDAO;
 import filter.FiltroController;
@@ -26,6 +27,8 @@ import java.sql.SQLException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import model.details.DadosPessoaisController;
+import model.details.order.ComprasController;
+import modelo.supermercado.Compra;
 import modelo.usuarios.Cliente;
 import modelo.usuarios.Funcionario;
 import modelo.usuarios.PessoaFisica.Genero;
@@ -110,7 +113,7 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
 
         PessoaFisica pf = pfs.get(indxPF);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DadosPessoais.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/DadosPessoais.fxml"));
         DadosPessoaisController dpc;
 
         try {
@@ -130,7 +133,24 @@ public class BuscaPessoaFisicaController implements Initializable, FilterComunic
 
     @FXML
     private void getAllOrders(ActionEvent event) {
-        //TODO fazer e usar tela com compras do cliente e a tela com itens de uma das compras
+        int indxPF = pessoaFisicaTable.getSelectionModel().getSelectedIndex();
+        if (indxPF == -1) {
+            return;
+        }
+
+        Cliente cliente = (Cliente) pfs.get(indxPF);
+
+        try {
+            List<Compra> compras = CompraDAO.readHistoricoComprasByCliente(cliente, supermercado);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/order/Compras.fxml"));
+            ComprasController cc = new ComprasController(compras);
+            loader.setController(cc);
+
+            Screen.openNew(loader);
+        } catch (IOException | SQLException | ClassNotFoundException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
     }
 
     @Override

@@ -55,7 +55,7 @@
                         <VBox>
                            <children>
                               <Label text="Qtd Unidades:" />
-                              <Spinner fx:id="qtdUnidades" maxWidth="1.7976931348623157E308" />
+                              <Spinner fx:id="qtdUnidades" editable="true" maxWidth="1.7976931348623157E308" />
                            </children>
                         </VBox>
                      </children>

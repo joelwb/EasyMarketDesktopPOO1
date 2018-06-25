@@ -98,7 +98,7 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
         Fornecedor fornecedor = fornecedores.get(indxForn);
         
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Fornecedor.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/model/details/Fornecedor.fxml"));
             FornecedorController fc = new FornecedorController(fornecedor);
             loader.setController(fc);
 
@@ -125,7 +125,7 @@ public class BuscaFornecedorController implements Initializable, FilterComunicat
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BuscaLote.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/search/BuscaLote.fxml"));
         BuscaLoteController blc = new BuscaLoteController(lotes);
         loader.setController(blc);
 

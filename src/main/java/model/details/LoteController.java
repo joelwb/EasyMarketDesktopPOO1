@@ -222,7 +222,7 @@ public class LoteController implements Initializable {
             return;
         }
 
-        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaProduto.fxml"));
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/search/BuscaProduto.fxml"));
         BuscaProdutoController bpc = new BuscaProdutoController(fc, supermercado, this);
         fc.setFilterComunication(bpc);
 
@@ -249,7 +249,7 @@ public class LoteController implements Initializable {
             return;
         }
 
-        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/BuscaFornecedor.fxml"));
+        FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/search/BuscaFornecedor.fxml"));
         BuscaFornecedorController bfc = new BuscaFornecedorController(fc, this);
         fc.setFilterComunication(bfc);
 
@@ -300,7 +300,7 @@ public class LoteController implements Initializable {
     }
 
     private FiltroController getNewFilterController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Filtro.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filter/Filtro.fxml"));
         FiltroController lc = new FiltroController(null);
         loader.setController(lc);
 

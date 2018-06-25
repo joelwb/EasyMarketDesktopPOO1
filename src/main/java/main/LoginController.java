@@ -13,13 +13,18 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.security.auth.login.LoginException;
 import modelo.supermercado.Supermercado;
@@ -32,7 +37,7 @@ import util.Screen;
  *
  * @author joel-
  */
-public class LoginController implements Initializable {
+public class LoginController implements Initializable, EventHandler<KeyEvent> {
 
     @FXML
     private TextField email;
@@ -44,11 +49,13 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        email.setOnKeyPressed(this);
+        senha.setOnKeyPressed(this);
     }
 
     @FXML
-    private void login(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
+    private void login(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main/Scene.fxml"));
         Funcionario funcionario;
         Supermercado supermercado;
 
@@ -68,10 +75,19 @@ public class LoginController implements Initializable {
         FXMLController controller = new FXMLController(supermercado, funcionario);
         loader.setController(controller);
 
-        Screen.openNew(loader);
+        try {
+            Screen.openNew(loader);
+        } catch (IOException ex) {
+            AlertCreator.exibeExececao(ex);
+        }
 
         Stage loginStage = (Stage) email.getScene().getWindow();
         loginStage.close();
+    }
+
+    @Override
+    public void handle(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) login(null);
     }
 
 }

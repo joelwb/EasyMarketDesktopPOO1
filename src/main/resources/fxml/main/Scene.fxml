@@ -59,7 +59,6 @@
                         <MenuItem mnemonicParsing="false" onAction="#showPagMaisRentavel" text="Mais rentável" />
                      </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" text="Vendas" />
                </items>
             </Menu>
         </menus>

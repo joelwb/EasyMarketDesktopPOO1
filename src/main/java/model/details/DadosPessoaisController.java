@@ -46,6 +46,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import modelo.supermercado.Supermercado;
 import modelo.usuarios.Cliente;
 import modelo.usuarios.Contato;
@@ -60,8 +61,8 @@ import static util.DateObjConversor.toLocalDate;
 import util.TableViewConfigurator;
 import util.Util;
 import main.MainScreenListener;
+import modelo.usuarios.Contato.Tipo;
 import org.json.JSONException;
-import org.postgresql.util.PSQLException;
 
 /**
  * FXML Controller class
@@ -76,7 +77,10 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
     private MainScreenListener listener;
     private boolean isPerfil;
     private List<Contato> contatos;
-    private String novaSenha;
+
+    private List<Contato> addedContatos;
+    private List<Contato> editedContatos;
+    private List<Contato> removedContatos;
 
     @FXML
     private TextField email;
@@ -123,6 +127,10 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
     @FXML
     private Button save;
     @FXML
+    private Button apagar;
+    @FXML
+    private Button searchCepButton;
+    @FXML
     private VBox senhaConteiner;
     @FXML
     private TitledPane secaoTrab;
@@ -136,7 +144,7 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
         this.funcionario = funcAcessado;
         this.supermercado = supermercado;
         this.listener = listener;
-        if (funcLogado == funcAcessado) {
+        if (funcAcessado != null && funcAcessado.getId() == funcLogado.getId()) {
             isPerfil = true;
         }
 
@@ -157,8 +165,15 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (listener == null) {         //Com certeza é consulta, ou de funcionario ou cliente
-            toolBar.setVisible(false);
-            toolBar.setManaged(false);
+            cancel.setVisible(false);
+            cancel.setManaged(false);
+
+            save.setVisible(false);
+            save.setManaged(false);
+
+            if (isPerfil) {
+                desabilitaEdicaoDados(); // é o próprio funcionario consultando seu perfil
+            }
         }
 
         TableViewConfigurator.configure(contatosTable);
@@ -171,7 +186,13 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
         if (funcionario == null && cliente == null) {   //é cadastro de funcionario
             senhaConteiner.setVisible(false);
             senhaConteiner.setManaged(false);
+            apagar.setVisible(false);
+            apagar.setManaged(false);
             save.setText("Cadastrar");
+
+            addedContatos = new ArrayList<>();
+            editedContatos = new ArrayList<>();
+            removedContatos = new ArrayList<>();
         } else {
 
             for (Contato contato : contatos) {
@@ -183,6 +204,9 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
             }
 
             if (funcionario != null) {                  //é consulta ou perfil de fucionario
+                addedContatos = new ArrayList<>();
+                editedContatos = new ArrayList<>();
+                removedContatos = new ArrayList<>();
 
                 setor.setText(funcionario.getSetor());
                 cargo.setText(funcionario.getCargo());
@@ -192,9 +216,12 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
                 if (!isPerfil) {
                     desabilitaEdicaoDados();            //é Consulta de funcionario
                 } else {
-                    email.setDisable(false);
+                    email.setDisable(true);
                     setor.setDisable(true);
                     cargo.setDisable(true);
+
+                    apagar.setVisible(false);
+                    apagar.setManaged(false);
                 }
 
             } else {                                    //é consulta de cliente
@@ -246,7 +273,9 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
             if (!isPerfil) {    //é cadastro de Funcionario
                 Funcionario novoFuncionario = new Funcionario(cargo, setor, cpf, dataNasc, genero, email, senha, nome, endereco);
-                FuncionarioDAO.create(novoFuncionario, supermercado);
+                int id = FuncionarioDAO.create(novoFuncionario, supermercado);
+
+                funcionario = new Funcionario(cargo, setor, cpf, dataNasc, genero, email, senha, id, nome, endereco);
             } else {            //é atualização dos dados
                 funcionario.setCargo(cargo);
                 funcionario.setSetor(setor);
@@ -270,9 +299,38 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
             }
             return;
         }
+
+        try {
+            for (Contato c : addedContatos) {
+                ContatoDAO.create(c, funcionario);
+            }
+            
+            for (Contato c : editedContatos){
+                ContatoDAO.update(c);
+            }
+            
+            for (Contato c : removedContatos){
+                ContatoDAO.delete(c.getId());
+            }
+        }catch (ClassNotFoundException | SQLException ex){
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+
         //TODO Atualizar os contatos
         AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso!", "Dados foram salvos", null);
         listener.pullScreen();
+    }
+
+    private int getIndxOfContato(List<Contato> contatos, Contato c) {
+        for (int i = 0; i < contatos.size(); i++) {
+            Contato cont = contatos.get(i);
+            if (cont.getDescricao().equals(c.getDescricao()) && cont.getTipo() == c.getTipo()) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @FXML
@@ -285,6 +343,8 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
+            addedContatos.add(new Contato(acac.getContato(), acac.getTipo()));
+
             List<String> row = new ArrayList<>();
             row.add(acac.getContato());
             row.add(acac.getTipo().toString());
@@ -303,15 +363,33 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
 
         List<String> row = contatosTable.getSelectionModel().getSelectedItem();
         acac.setContato(row.get(0));
-        for (Contato.Tipo tipo : Contato.Tipo.values()) {
-            if (tipo.toString().equals(row.get(1))) {
-                acac.setTipo(tipo);
+        Tipo tipo = null;
+        for (Tipo t : Tipo.values()) {
+            if (t.toString().equals(row.get(1))) {
+                acac.setTipo(t);
+                tipo = t;
                 break;
             }
         }
 
+        Contato editedContato = new Contato(row.get(0), tipo);
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
+            int indx = getIndxOfContato(addedContatos, editedContato);
+            if (indx != -1) {
+                addedContatos.remove(indx);
+                addedContatos.add(new Contato(acac.getContato(), acac.getTipo()));
+            } else {
+                Contato c = contatos.get(getIndxOfContato(contatos, editedContato));
+                editedContatos.remove(c);
+
+                c.setDescricao(acac.getContato());
+                c.setTipo(acac.getTipo());
+
+                editedContatos.add(c);
+            }
+
             row.set(0, acac.getContato());
             row.add(1, acac.getTipo().toString());
             contatosTable.refresh();
@@ -321,6 +399,45 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
     //TODO Analizar como vai fazer para controlar os contatos
     @FXML
     private void removeContato(ActionEvent event) {
+        List<String> row = contatosTable.getSelectionModel().getSelectedItem();
+
+        Tipo tipo = null;
+        for (Tipo t : Tipo.values()) {
+            if (row.get(1).equals(t.toString())) {
+                tipo = t;
+                break;
+            }
+        }
+
+        Contato removedContato = new Contato(row.get(0), tipo);
+
+        int indx = getIndxOfContato(addedContatos, removedContato);
+        if (indx != -1) {
+            addedContatos.remove(indx);
+        } else if ((indx = getIndxOfContato(editedContatos, removedContato)) != -1) {
+            editedContatos.remove(indx);
+        }
+
+        if (contatos != null && (indx = getIndxOfContato(contatos, removedContato)) != -1) {
+            Contato c = contatos.get(indx);
+            removedContatos.add(c);
+        }
+
+        contatosTable.getItems().remove(row);
+    }
+
+    @FXML
+    private void apagar(ActionEvent event) {
+        try {
+            FuncionarioDAO.delete(funcionario.getId());
+        } catch (SQLException | ClassNotFoundException ex) {
+            AlertCreator.exibeExececao(ex);
+            return;
+        }
+
+        AlertCreator.criarAlert(Alert.AlertType.INFORMATION, "Sucesso", "Funcionário apagado com sucesso!", null);
+
+        ((Stage) email.getScene().getWindow()).close();
     }
 
     @FXML
@@ -406,6 +523,7 @@ public class DadosPessoaisController implements Initializable, ViaCEPEvents {
         estado.setDisable(true);
         setor.setDisable(true);
         cargo.setDisable(true);
+        searchCepButton.setDisable(true);
 
         addContato.setVisible(false);
         addContato.setManaged(false);

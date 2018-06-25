@@ -32,7 +32,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.SplitPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import modelo.supermercado.Supermercado;
@@ -109,9 +108,9 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
 
         try {
             if (tipo == RelatorioMeioPagController.TipoRelatorio.MAIS_UTILIZADO) {
-                map = CartaoDAO.getMeiosPagMaisUsado(supermercado, dataMin, dataMax);
+                map = CartaoDAO.readMeiosPagMaisUsado(supermercado, dataMin, dataMax);
             } else {
-                map = CartaoDAO.getMeiosPagMaisRentavel(supermercado, dataMin, dataMax);
+                map = CartaoDAO.readMeiosPagMaisRentavel(supermercado, dataMin, dataMax);
             }
 
             refreshTable();
@@ -122,17 +121,17 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
 
     @FXML
     public void openGrafico(ActionEvent event) {
-        BarChart<String,Number> barChar = new BarChart<>(new CategoryAxis(),new NumberAxis());
+        final BarChart<String, Number> barChar = new BarChart<>(new CategoryAxis(), new NumberAxis());
         LineChart<String, Number> lineChart = new LineChart<>(new CategoryAxis(), new NumberAxis());
 
         lineChart.getData().addAll(getCreditoData(), getDebitoData());
-        barChar.getData().addAll(getCreditoData(),getDebitoData());
-        
+        barChar.getData().addAll(getCreditoData(), getDebitoData());
+
         lineChart.setMinWidth(0);
         barChar.setMinWidth(0);
-        
+
         SplitPane sp = new SplitPane();
-        sp.getItems().addAll(barChar,lineChart);
+        sp.getItems().addAll(barChar, lineChart);
         
         Scene scene = new Scene(sp);
         Stage stage = new Stage();
@@ -154,11 +153,11 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
             tableRelatorio.getItems().add(row);
         }
     }
-    
-    private XYChart.Series<String,Number> getCreditoData(){
-        XYChart.Series<String,Number> credito = new XYChart.Series();
+
+    private XYChart.Series<String, Number> getCreditoData() {
+        XYChart.Series<String, Number> credito = new XYChart.Series();
         credito.setName("Crédito");
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         for (Date dataCompra : map.keySet()) {
@@ -168,14 +167,14 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
                 credito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Crédito")));
             }
         }
-        
+
         return credito;
     }
-    
-    private XYChart.Series<String,Number> getDebitoData(){
-        XYChart.Series<String,Number> debito = new XYChart.Series();
+
+    private XYChart.Series<String, Number> getDebitoData() {
+        XYChart.Series<String, Number> debito = new XYChart.Series();
         debito.setName("Débito");
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         for (Date dataCompra : map.keySet()) {
@@ -185,7 +184,7 @@ public class RelatorioMeioPagController implements Initializable, FilterComunica
                 debito.getData().add(new XYChart.Data(sdf.format(dataCompra), map.get(dataCompra).get("Débito")));
             }
         }
-        
+
         return debito;
     }
 
