@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>main.MainApp</mainClass>
+        <mainClass>visao.main.MainApp</mainClass>
     </properties>
 
     <organization>
